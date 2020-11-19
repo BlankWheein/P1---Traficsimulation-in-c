@@ -1,4 +1,0 @@
-awdojaåwodjawd
-ajdw
-oawdianwd
-oawdianwdiawnd
