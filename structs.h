@@ -1,3 +1,5 @@
+typedef enum {Bus, Car} Lane_type;
+
 typedef struct Car {
   double speed;
   double break;
@@ -6,4 +8,9 @@ typedef struct Car {
   double speed_limit;
   double acceleration;
   double safe_distance;
-}Car;
+} Car;
+
+typedef struct {
+Lane_type lane_type; /* Type can be "Bus" or "Car" */
+double len; /* Length of road */
+} Road;
