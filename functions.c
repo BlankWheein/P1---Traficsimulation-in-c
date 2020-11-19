@@ -12,6 +12,12 @@ Car accelerate_car(Car car, Road road){
   return car;
 }
 
+int check_light(Traffic_light light) {
+  int drive = light.light_color == green ? 1 : 0;
+  return drive;
+}
+
+
 int main (){
 
   return 0;
