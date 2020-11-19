@@ -9,7 +9,7 @@ typedef struct Traffic_light {
 
 typedef struct Car {
   double speed;
-  double break;
+  double breaks;
   double location;  /* så du ved hvor bilen er på broen */
   double car_length;
   double speed_limit;
