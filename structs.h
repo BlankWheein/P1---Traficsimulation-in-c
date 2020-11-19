@@ -18,6 +18,6 @@ typedef struct {
 } Car;
 
 typedef struct {
-Lane_type lane_type; /* Type can be "Bus" or "Car" */
+Lane_type lane_type; /* Type can be "Bus_lane" or "Car_lane" */
 double len; /* Length of road */
 } Road;
