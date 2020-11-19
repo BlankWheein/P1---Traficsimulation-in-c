@@ -4,7 +4,7 @@
 #include <windows.h>
 
 #include "functions.h"
-#include "strcuts.h"
+#include "structs.h"
 
 
 
@@ -12,6 +12,5 @@
 int main(void) {
 
 
-
-return EXIT_SUCSSES;
+return EXIT_SUCCESS;
 }
