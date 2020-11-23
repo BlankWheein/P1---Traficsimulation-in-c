@@ -5,16 +5,18 @@ typedef enum {Bus_lane, Car_lane} Lane_type;
 typedef struct  {
   Light_color light_color;
   double position;
+  int timer;
 } Traffic_light;
 
 typedef struct {
   double speed;
   double breaks;
   double location;  /* så du ved hvor bilen er på broen */
-  double car_length;
+  double length;
   double speed_limit;
   double acceleration;
   double safe_distance;
+  int ID;
 } Car;
 
 typedef struct {
