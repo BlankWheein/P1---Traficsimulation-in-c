@@ -17,6 +17,7 @@ typedef struct {
   double acceleration;
   double safe_distance;
   int ID;
+  int lane;
 } Car;
 
 typedef struct {
