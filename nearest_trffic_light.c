@@ -3,9 +3,8 @@
 
 Traffic_light get_nearest_traffic_light(Car car, Traffic_light lights[]) {
   Traffic_light nearest_light = lights[0];
-  for (int i = 0; i < 2; i++) {
+  while(lgi)
 
-  }
 }
 
 int main(void) {
