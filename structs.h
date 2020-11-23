@@ -1,6 +1,6 @@
 
-typedef enum {green, yellow, red} Light_color;
-typedef enum {Bus, Car} Lane_type;
+typedef enum {green, yellow, red, dummy} Light_color;
+typedef enum {Bus_lane, Car_lane} Lane_type;
 
 typedef struct Traffic_light {
   Light_color light_color;
@@ -9,9 +9,9 @@ typedef struct Traffic_light {
 
 typedef struct Car {
   double speed;
-  double break;
+  double breaks;
   double location;  /* så du ved hvor bilen er på broen */
-  double car_length;
+  double length;
   double speed_limit;
   double acceleration;
   double safe_distance;
