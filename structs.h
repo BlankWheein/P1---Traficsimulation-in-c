@@ -1,5 +1,4 @@
-
-typedef enum {green, yellow, red} Light_color;
+typedef enum {green, yellow, red, dummy} Light_color;
 typedef enum {Bus_lane, Car_lane} Lane_type;
 
 typedef struct  {
