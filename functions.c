@@ -22,6 +22,16 @@ void print_cars(Car cars[], int cars_int) {
         print_car(cars[i]);
     }
 }
+Traffic_light nearest_traffic_light(Car car, Traffic_light lights[], int lights_int) {
+  int i;
+  Traffic_light nearest_light = {dummy, 99999};
+  for (i = 0; i < lights_int; i++) { /* remember variable for number of lights */
+    if (lights[i].position > car.location && nearest_light.position > lights[i].position) {
+      nearest_light = lights[i];
+    }
+  }
+  return nearest_light;
+}
 void print_car(Car car) {
     printf("Car(%d): Speed: %.1lf, breaks: %.1lf, location: %.2lf, lenght: %.2lf, speed_limit: %.1lf, acceleration: %.3lf, safe_distance: %.2lf\n", car.ID, car.speed, car.breaks, car.location, car.length, car.speed_limit, car.acceleration, car.safe_distance);
 }
