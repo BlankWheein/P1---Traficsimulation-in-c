@@ -1,3 +1,6 @@
+#ifndef STRUCTS
+#define STRUCTS
+
 typedef enum {green, red, dummy} Light_color;
 typedef enum {Bus_lane, Car_lane} Lane_type;
 
@@ -26,3 +29,5 @@ typedef struct {
   Lane_type lane_type; /* Type can be "Bus_lane" or "Car_lane" */
   double len; /* Length of road */
 } Road;
+
+#endif
