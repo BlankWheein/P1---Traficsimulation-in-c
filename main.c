@@ -10,11 +10,17 @@ int main(void) {
     Traffic_light light = {
         red, 0, 0, 10, 5
     };
+    Traffic_light light2 = {red, 0, 0, 100, 20};
+    Traffic_light lights[] = {light, light2};
 while (1)
 {
-    light = count_timer(light);
-    Sleep(200);
-    printf("%s %lf", color_to_string(light.color), light.timer);
+    for (int i = 0; i < 2; i++) {
+      lights[i] = count_timer(lights[i]);
+      printf("%s %d\n", color_to_string(lights[i].color), lights[i].timer);
+    }
+    printf("\n");
+    Sleep(500);
+
 }
 
 
