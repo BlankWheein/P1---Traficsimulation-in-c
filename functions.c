@@ -25,13 +25,69 @@ Car drive(Car car, cars[], int cars_int, Road road) {
     car = accelerate_car(car, road);
     Car closest = get_nearest_car(car, cars, cars_int);
 
+double ms_to_kmt(double x){
+  return x * 3.6;
+}
+
+
+double kmt_to_ms(double x){
+  return x / 3.6;
+}
+Car set_safe_distance(Car car) {
+    car.safe_distance = (ms_to_kmt(car.speed) / 2) + 1;
     return car;
 }
+
+int check_safe_distance(Car car, Car car_in_front) {
+    double delta = car_in_front.position - car.position;
+    if (delta > car.safe_distance)
+    {
+      return 0;
+    }
+    return 1;
+}
+void print_car(Car car) {
+    printf("Car(%d): Speed: %.1lf, breaks: %.1lf, position: %.2lf, lenght: %.2lf, speed_limit: %.1lf, acceleration: %.3lf, safe_distance: %.2lf\n", car.ID, car.speed, car.breaks, car.position, car.length, car.speed_limit, car.acceleration, car.safe_distance);
+}
+
 void print_cars(Car cars[], int cars_int) {
     for (int i = 0; i < cars_int; i++) {
         print_car(cars[i]);
     }
 }
+
+char* color_to_string(Light_color color) {
+  switch (color)
+  {
+  case red:
+    return "Red";
+    break;
+  case green:
+    return "Green";
+    break;
+  case dummy:
+    return "Dummy";
+    break;
+  default:
+    break;
+  }
+}
+
+Traffic_light count_timer(Traffic_light light) {
+  light.timer += 1;
+    if (light.color == green && light.timer == light.timer_green)
+    {
+      light.color = red;
+      light.timer = 0;
+    }
+    else if (light.color == red && light.timer == light.timer_red)
+    {
+      light.color = green;
+      light.timer = 0;
+    }
+  return light;
+}
+
 Traffic_light nearest_traffic_light(Car car, Traffic_light lights[], int lights_int) {
   int i;
   Traffic_light nearest_light = {dummy, 99999};
@@ -45,9 +101,7 @@ Traffic_light nearest_traffic_light(Car car, Traffic_light lights[], int lights_
   }
   return nearest_light;
 }
-void print_car(Car car) {
-    printf("Car(%d): Speed: %.1lf, breaks: %.1lf, position: %.2lf, lenght: %.2lf, speed_limit: %.1lf, acceleration: %.3lf, safe_distance: %.2lf\n", car.ID, car.speed, car.breaks, car.position, car.length, car.speed_limit, car.acceleration, car.safe_distance);
-}
+
 Car create_car(int id, int dist) {
     Car car = {0, 0, dist, 0, 50, 4, 10, id, 1};
     return car;
@@ -67,14 +121,13 @@ Car get_nearest_car(Car car, Car cars[], int cars_int) {
 }
 
 int check_light(Traffic_light light) {
-  int drive = light.light_color == green ? 1 : 0;
+  int drive = light.color == green ? 1 : 0;
   return drive;
 }
 
-double ms_to_kmt(double x){
-  return x * 3.6;
-}
+Car drive(Car car, Car cars[], int cars_int, Road road) {
+    car = accelerate_car(car, road);
+    Car closest = get_nearest_car(car, cars, cars_int);
 
-double kmt_to_ms(double x){
-  return x / 3.6;
+    return car;
 }
