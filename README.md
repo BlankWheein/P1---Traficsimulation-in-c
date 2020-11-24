@@ -1,4 +1,4 @@
-# P1
+### Vi opdaterer vores readme løbende, så du kan altid komme herind og se om der er ændringer :)
 ## Her er vores program indtil videre
 Lige nu er vi i gang med at lave helper functions til vores program.
 Så der er kun helper functioner og ikke noget reel funktionalitet.
@@ -16,4 +16,9 @@ Vi har valgt ikke at have gult lys da det ikke gør den store forskel på hvor p
 
 Vi har også valgt at de ikke skal kunne overhale da vi ikke rigtig obsaverede det på broen og fordi at det ville gøre det meget sværrer at programmere.
 
-### Vi opdaterer vores readme løbende, så du kan altid komme herind og se om der er ændringer :)
+# Vi har lige lavet en prototype af vores program
+Den er i main.c
+Dette er dog ikke tæt på det færdige program det er bare en outline for hvordan det kommer til at foregå
+Vi kan få flere biler til at køre over broen givet at de ikke starter på den samme position (Den funktion der skal holde styr på det bliver lavet i morgen(25/11)
+
+
