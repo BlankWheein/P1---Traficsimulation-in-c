@@ -10,6 +10,8 @@ typedef struct  {
   int timer, timer_green, timer_red;
 } Traffic_light;
 
+
+
 typedef struct {
   double speed;
   double breaks;
@@ -22,12 +24,12 @@ typedef struct {
   double safe_distance;
   int ID;
   int lane;
+  int secs_on_bridge;
 } Car;
 
 typedef struct {
   double speed_limit;
   Lane_type lane_type; /* Type can be "Bus_lane" or "Car_lane" */
-  double len; /* Length of road */
+  double length; /* Length of road */
 } Road;
-
 #endif
