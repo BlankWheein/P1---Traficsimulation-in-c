@@ -42,7 +42,7 @@ Car create_car(int id, int dist) {
 
 Car get_nearest_car(Car car, Car cars[], int cars_int) {
     Car closest = create_car(-1, 99999999);
-    if (cars_int == < 1) {
+    if (cars_int < 1) {
         return closest;
     }
     for (int i = 0; i < cars_int; i++) {
