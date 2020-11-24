@@ -10,7 +10,7 @@ typedef struct  {
 typedef struct {
   double speed;
   double breaks;
-  double location;  /* så du ved hvor bilen er på broen */
+  double position;  /* så du ved hvor bilen er på broen */
   double length;
   double speed_limit;
   double acceleration;
