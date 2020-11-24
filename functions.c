@@ -10,7 +10,12 @@ Car accelerate_car(Car car, Road road){
   }
   return car;
 }
- 
+
+Car set_safe_distance(Car car) {
+    car.safe_distance = (ms_to_kmt(car.speed) / 2) + 1;
+    return car;
+}
+
 Car drive(Car car, cars[], int cars_int, Road road) {
     car = accelerate_car(car, road);
     Car closest = get_nearest_car(car, cars, cars_int);
