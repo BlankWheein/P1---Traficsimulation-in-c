@@ -15,3 +15,5 @@ Vi har valgt ikke at have gult lys da det ikke gør den store forskel på hvor p
 - At biler kan overhale
 
 Vi har også valgt at de ikke skal kunne overhale da vi ikke rigtig obsaverede det på broen og fordi at det ville gøre det meget sværrer at programmere.
+
+### Vi opdaterer vores readme løbende, så du kan altid komme herind og se om der er ændringer :)
