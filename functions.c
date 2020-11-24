@@ -36,6 +36,39 @@ void print_cars(Car cars[], int cars_int) {
         print_car(cars[i]);
     }
 }
+
+char* color_to_string(Light_color color) {
+  switch (color)
+  {
+  case red:
+    return "Red";
+    break;
+  case green:
+    return "Green";
+    break;  
+  case dummy:
+    return "Dummy";
+    break;
+  default:
+    break;
+  }
+} 
+
+Traffic_light count_timer(Traffic_light light) {
+  light.timer += 1;
+    if (light.color == green && light.timer == light.timer_green)
+    {
+      light.color = red;
+      light.timer = 0;
+    }
+    else if (light.color == red && light.timer == light.timer_red)
+    {
+      light.color = green;
+      light.timer = 0; 
+    }
+  return light;
+}
+
 Traffic_light nearest_traffic_light(Car car, Traffic_light lights[], int lights_int) {
   int i;
   Traffic_light nearest_light = {dummy, 99999};
