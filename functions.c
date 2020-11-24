@@ -60,3 +60,11 @@ int check_light(Traffic_light light) {
   int drive = light.light_color == green ? 1 : 0;
   return drive;
 }
+
+double ms_to_kmt(double x){
+  return x * 3.6;
+}
+
+double kmt_to_ms(double x){
+  return x / 3.6;
+}
