@@ -7,9 +7,7 @@
 
 int main(void) {
 
-    Traffic_light light = {
-        red, 0, 0, 10, 5
-    };
+    Traffic_light light = {red, 0, 0, 10, 5};
     Traffic_light light2 = {red, 0, 0, 100, 20};
     Traffic_light lights[] = {light, light2};
 while (1)

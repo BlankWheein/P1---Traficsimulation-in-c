@@ -1,5 +1,7 @@
 #include "structs.h"
 
+#include "functions.h"
+
 Car acceleration(Car car, Road road){
   car.speed_limit = 26.82;
   car.speed_limit_time= 8.5;
@@ -21,10 +23,10 @@ Car accelerate_car(Car car, Road road){
 }
 
 
-Car drive(Car car, cars[], int cars_int, Road road) {
+Car drive(Car car, Car cars[], int cars_int, Road road) {
     car = accelerate_car(car, road);
     Car closest = get_nearest_car(car, cars, cars_int);
-
+}
 double ms_to_kmt(double x){
   return x * 3.6;
 }
@@ -123,11 +125,4 @@ Car get_nearest_car(Car car, Car cars[], int cars_int) {
 int check_light(Traffic_light light) {
   int drive = light.color == green ? 1 : 0;
   return drive;
-}
-
-Car drive(Car car, Car cars[], int cars_int, Road road) {
-    car = accelerate_car(car, road);
-    Car closest = get_nearest_car(car, cars, cars_int);
-
-    return car;
 }
