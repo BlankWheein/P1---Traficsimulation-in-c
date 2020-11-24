@@ -13,6 +13,8 @@ typedef struct {
   double position;  /* så du ved hvor bilen er på broen */
   double length;
   double speed_limit;
+  double speed_limit_time;
+  double time_driving;
   double acceleration;
   double safe_distance;
   int ID;
