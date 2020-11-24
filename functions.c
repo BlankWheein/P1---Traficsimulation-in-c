@@ -1,9 +1,6 @@
-#include "structs.h"
-
 #include "functions.h"
 
-Car acceleration(Car car, Road road){
-  car.speed_limit = 26.82;
+Car set_car_acceleration(Car car){
   car.speed_limit_time= 8.5;
   /* Constant acceleraton formula. */
   /*acceleration = 2(1-theta)(v_final - v_0) m/s / t_accTime s (m/s^2) */
@@ -24,8 +21,27 @@ Car accelerate_car(Car car, Road road){
 
 
 Car drive(Car car, Car cars[], int cars_int, Road road) {
-    car = accelerate_car(car, road);
+    if (car.ID == -1) {
+        return car;
+    }
+    car = set_car_acceleration(car);
     Car closest = get_nearest_car(car, cars, cars_int);
+    car = set_safe_distance(car);
+    int is_safe = check_if_safe_distance(car, closest);
+    if (is_safe == 1) {
+        car = accelerate_car(car, road);
+        car.position += car.speed;
+    } else {
+        car.speed = closest.speed;
+        car.position += car.speed; // Needs a check if car will end up in other car, if so deaccelerate
+    }
+    if (car.position > 0) {
+        car.secs_on_bridge += 1;
+    }
+    if (car.position > road.length) {
+        car.ID = -1;
+    }
+    return car;
 }
 double ms_to_kmt(double x){
   return x * 3.6;
@@ -40,16 +56,16 @@ Car set_safe_distance(Car car) {
     return car;
 }
 
-int check_safe_distance(Car car, Car car_in_front) {
+int check_if_safe_distance(Car car, Car car_in_front) {
     double delta = car_in_front.position - car.position;
     if (delta > car.safe_distance)
     {
-      return 0;
+      return 1;
     }
-    return 1;
+    return 0;
 }
 void print_car(Car car) {
-    printf("Car(%d): Speed: %.1lf, breaks: %.1lf, position: %.2lf, lenght: %.2lf, speed_limit: %.1lf, acceleration: %.3lf, safe_distance: %.2lf\n", car.ID, car.speed, car.breaks, car.position, car.length, car.speed_limit, car.acceleration, car.safe_distance);
+    printf("Car(%d): Speed: %.3lf(%.1lf), position: %.2lf, secs_on_bridge: %d, speed_limit: %.1lf, acceleration: %.3lf, safe_distance: %.2lf\n", car.ID, car.speed, ms_to_kmt(car.speed), car.position, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.acceleration, car.safe_distance);
 }
 
 void print_cars(Car cars[], int cars_int) {
@@ -73,6 +89,16 @@ char* color_to_string(Light_color color) {
   default:
     break;
   }
+}
+
+Road create_road(double speed_limit, Lane_type lane, double len) {
+    Road road = {kmt_to_ms(speed_limit), lane, len};
+    return road;
+}
+
+Traffic_light create_light(Light_color color, double pos, int timer_green, int timer_red) {
+    Traffic_light light = {color, pos, 0, timer_green, timer_red};
+    return light;
 }
 
 Traffic_light count_timer(Traffic_light light) {
@@ -104,13 +130,25 @@ Traffic_light nearest_traffic_light(Car car, Traffic_light lights[], int lights_
   return nearest_light;
 }
 
-Car create_car(int id, int dist) {
-    Car car = {0, 0, dist, 0, 50, 4, 10, id, 1};
+Car create_car(int id, int dist, double speed_limit_) {
+    double speed = 0;
+    double breaks = 0;
+    double position = dist;
+    double length = 0;
+    double speed_limit = kmt_to_ms(speed_limit_);
+    double speed_limit_time = 0;
+    double time_driving = 0;
+    double acceleration = 0;
+    double safe_distance = 1;
+    int ID = id;
+    int lane = 1;
+    int secs_on_bridge = 0;
+    Car car = {speed, breaks, position, length, speed_limit, speed_limit_time, time_driving, acceleration, safe_distance, ID, lane, secs_on_bridge};
     return car;
 }
 
 Car get_nearest_car(Car car, Car cars[], int cars_int) {
-    Car closest = create_car(-1, 99999999);
+    Car closest = create_car(-1, 99999999, 160);
     if (cars_int < 1) {
         return closest;
     }
