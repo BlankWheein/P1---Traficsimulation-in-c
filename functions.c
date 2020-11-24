@@ -10,7 +10,7 @@ Car accelerate_car(Car car, Road road){
   }
   return car;
 }
-
+ 
 Car drive(Car car, cars[], int cars_int, Road road) {
     car = accelerate_car(car, road);
     Car closest = get_nearest_car(car, cars, cars_int);
