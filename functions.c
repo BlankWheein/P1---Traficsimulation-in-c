@@ -16,6 +16,15 @@ Car set_safe_distance(Car car) {
     return car;
 }
 
+int check_safe_distance(Car car, Car car_in_front) {
+    double delta = car_in_front.position - car.position;
+    if (delta > car.safe_distance)
+    {
+      return 0;
+    }
+    return 1;
+}
+
 Car drive(Car car, cars[], int cars_int, Road road) {
     car = accelerate_car(car, road);
     Car closest = get_nearest_car(car, cars, cars_int);
