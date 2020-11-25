@@ -199,7 +199,15 @@ Car get_nearest_car(Car car, Car cars[], int cars_int) {
     return closest;
 }
 
-int check_light(Traffic_light light) {
-  int drive = light.color == green ? 1 : 0;
-  return drive;
+Car check_light(Traffic_light light, Car car) {
+  int drive = light.color == red ? 1 : 0;
+  if (light.color == red) {
+    if (Traffic_light.position - car.position < 20) {
+      car.speed == 5;
+    }
+    if (Traffic_light.position - car.position < 6) {
+      car.speed == 0;
+    }
+}
+  return car;
 }
