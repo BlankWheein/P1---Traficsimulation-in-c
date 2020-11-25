@@ -8,7 +8,9 @@ typedef enum {Waiting, Driving, Done, Mock} State;
 typedef struct  {
   Light_color color;
   double position;
-  int timer, timer_green, timer_red;
+  int timer;
+  int timer_green;
+  int timer_red;
 } Traffic_light;
 
 

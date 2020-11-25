@@ -16,32 +16,43 @@ Car accelerate_car(Car car, Road road){
   return car;
 }
 
-Car state_waiting(Car car, Car cars[], int cars_int, Road road) {
+Car state_waiting(Car car, Car cars[], int cars_int, Road road, Traffic_light lights[], int lights_int) {
   Car closest = get_nearest_car(car, cars, cars_int);
   int is_safe = check_if_safe_distance(car, closest);
   if (is_safe == 1) {
    car.state = Driving;
-   car = state_driving(car, cars, cars_int, road);
+   car = state_driving(car, cars, cars_int, road, lights, lights_int);
  }
 return car;
 }
 
 
-Car state_driving(Car car, Car cars[], int cars_int, Road road) {
+Car state_driving(Car car, Car cars[], int cars_int, Road road, Traffic_light lights[], int lights_int) {
   car = set_car_acceleration(car);
   Car closest = get_nearest_car(car, cars, cars_int);
   car = set_safe_distance(car);
+  Traffic_light light = nearest_traffic_light(car, lights, lights_int);
+  printf("%s, %d, %.1lf\n", color_to_string(light.color), light.timer, light.position);
+
 
   int is_safe = check_if_safe_distance(car, closest);
   if (is_safe == 1) {
       car = accelerate_car(car, road);
-  } else {
-    if (car.state == Mock) {
+  }
+
+  if (is_safe == 0) {
+
+    if (closest.state == Mock) {
       return car;
     }
-      car.speed = closest.speed;
+      if (car.speed > closest.position - car.position) {
+        car.speed = closest.speed;
+      }
+
        // Needs a check if car will end up in other car, if so deaccelerate
   }
+  car = check_light(light, car);
+
   car.position += car.speed;
   if (car.position > 0) {
       car.secs_on_bridge += 1;
@@ -53,11 +64,11 @@ Car state_driving(Car car, Car cars[], int cars_int, Road road) {
 }
 
 
-Car drive(Car car, Car cars[], int cars_int, Road road) {
+Car drive(Car car, Car cars[], int cars_int, Road road, Traffic_light lights[], int lights_int) {
    if (car.state == Waiting) {
-car = state_waiting(car, cars, cars_int, road);
+car = state_waiting(car, cars, cars_int, road, lights, lights_int);
    } else if(car.state == Driving) {
-     car = state_driving(car, cars, cars_int, road);
+     car = state_driving(car, cars, cars_int, road, lights, lights_int);
    }
  return car;
 }
@@ -70,7 +81,7 @@ double kmt_to_ms(double x){
   return x / 3.6;
 }
 Car set_safe_distance(Car car) {
-    car.safe_distance = (ms_to_kmt(car.speed) / 2) + 1;
+    car.safe_distance = (ms_to_kmt(car.speed) / 3) + 1;
     return car;
 }
 
@@ -134,8 +145,8 @@ Road create_road(double speed_limit, Lane_type lane, double len) {
     return road;
 }
 
-Traffic_light create_light(Light_color color, double pos, int timer_green, int timer_red) {
-    Traffic_light light = {color, pos, 0, timer_green, timer_red};
+Traffic_light create_light(Light_color color, double position, int timer_green, int timer_red) {
+    Traffic_light light = {color, position, 0, timer_green, timer_red};
     return light;
 }
 
@@ -156,7 +167,7 @@ Traffic_light count_timer(Traffic_light light) {
 
 Traffic_light nearest_traffic_light(Car car, Traffic_light lights[], int lights_int) {
   int i;
-  Traffic_light nearest_light = {dummy, 99999};
+  Traffic_light nearest_light = {dummy, 99999, 0, 0, 0};
   if (lights_int < 1) {
     return nearest_light;
   }
@@ -200,13 +211,14 @@ Car get_nearest_car(Car car, Car cars[], int cars_int) {
 }
 
 Car check_light(Traffic_light light, Car car) {
-  int drive = light.color == red ? 1 : 0;
   if (light.color == red) {
-    if (Traffic_light.position - car.position < 20) {
-      car.speed == 5;
+    if (light.position - car.position < 20) {
+      car.speed = 5;
+      printf("Setting speed to 5");
     }
-    if (Traffic_light.position - car.position < 6) {
-      car.speed == 0;
+    if (light.position - car.position < 6) {
+      car.speed = 0;
+      printf("Setting speed to 0\n");
     }
 }
   return car;
