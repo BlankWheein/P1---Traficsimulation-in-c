@@ -1,5 +1,5 @@
 #include "functions.h"
-
+#include "structs.h"
 Car set_car_acceleration(Car car){
   car.acceleration = (2 * (1 - (car.time_driving/car.speed_limit_time)) * (car.speed_limit - 0)) / car.speed_limit_time;
   return car;
@@ -16,29 +16,50 @@ Car accelerate_car(Car car, Road road){
   return car;
 }
 
+Car state_waiting(Car car, Car cars[], int cars_int, Road road) {
+  Car closest = get_nearest_car(car, cars, cars_int);
+  int is_safe = check_if_safe_distance(car, closest);
+  if (is_safe == 1) {
+   car.state = Driving;
+   car = state_driving(car, cars, cars_int, road);
+ }
+return car;
+}
+
+
+Car state_driving(Car car, Car cars[], int cars_int, Road road) {
+  car = set_car_acceleration(car);
+  Car closest = get_nearest_car(car, cars, cars_int);
+  car = set_safe_distance(car);
+
+  int is_safe = check_if_safe_distance(car, closest);
+  if (is_safe == 1) {
+      car = accelerate_car(car, road);
+  } else {
+    if (car.state == Mock) {
+      return car;
+    }
+      car.speed = closest.speed;
+       // Needs a check if car will end up in other car, if so deaccelerate
+  }
+  car.position += car.speed;
+  if (car.position > 0) {
+      car.secs_on_bridge += 1;
+  }
+  if (car.position > road.length) {
+      car.state = Done;
+  }
+  return car;
+}
+
 
 Car drive(Car car, Car cars[], int cars_int, Road road) {
-    if (car.ID == -1) {
-        return car;
-    }
-    car = set_car_acceleration(car);
-    Car closest = get_nearest_car(car, cars, cars_int);
-    car = set_safe_distance(car);
-    int is_safe = check_if_safe_distance(car, closest);
-    if (is_safe == 1) {
-        car = accelerate_car(car, road);
-        car.position += car.speed;
-    } else {
-        car.speed = closest.speed;
-        car.position += car.speed; // Needs a check if car will end up in other car, if so deaccelerate
-    }
-    if (car.position > 0) {
-        car.secs_on_bridge += 1;
-    }
-    if (car.position > road.length) {
-        car.ID = -1;
-    }
-    return car;
+   if (car.state == Waiting) {
+car = state_waiting(car, cars, cars_int, road);
+   } else if(car.state == Driving) {
+     car = state_driving(car, cars, cars_int, road);
+   }
+ return car;
 }
 double ms_to_kmt(double x){
   return x * 3.6;
@@ -54,7 +75,7 @@ Car set_safe_distance(Car car) {
 }
 
 int check_if_safe_distance(Car car, Car car_in_front) {
-    double delta = car_in_front.position - car.position;
+    double delta = car_in_front.position - car.position - car.acceleration - 0.5;
     if (delta > car.safe_distance)
     {
       return 1;
@@ -62,7 +83,7 @@ int check_if_safe_distance(Car car, Car car_in_front) {
     return 0;
 }
 void print_car(Car car) {
-    printf("Car(%d): Speed: %.3lf(%.1lf), position: %.2lf, secs_on_bridge: %d, speed_limit: %.1lf, acceleration: %.3lf, safe_distance: %.2lf\n", car.ID, car.speed, ms_to_kmt(car.speed), car.position, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.acceleration, car.safe_distance);
+    printf("Car(%d): Speed: %.3lf(%.1lf), position: %.2lf, secs_on_bridge: %d, speed_limit: %.1lf, acceleration: %.3lf, safe_distance: %.2lf, State: %s\n", car.ID, car.speed, ms_to_kmt(car.speed), car.position, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.acceleration, car.safe_distance, state_to_string(car.state));
 }
 
 void print_cars(Car cars[], int cars_int) {
@@ -83,6 +104,26 @@ char* color_to_string(Light_color color) {
   case dummy:
     return "Dummy";
     break;
+  default:
+    break;
+  }
+}
+
+char* state_to_string(State state) {
+  switch (state)
+  {
+  case Waiting:
+    return "Waiting";
+    break;
+  case Driving:
+    return "Driving";
+    break;
+  case Done:
+    return "Done";
+    break;
+    case Mock:
+      return "Mock";
+      break;
   default:
     break;
   }
@@ -133,14 +174,15 @@ Car create_car(int id, int dist, double speed_limit_) {
     double position = dist;
     double length = 0;
     double speed_limit = kmt_to_ms(speed_limit_);
-    double speed_limit_time = 0;
+    double speed_limit_time = 65.5;
     double time_driving = 0;
     double acceleration = 0;
     double safe_distance = 1;
     int ID = id;
     int lane = 1;
     int secs_on_bridge = 0;
-    Car car = {speed, breaks, position, length, speed_limit, speed_limit_time, time_driving, acceleration, safe_distance, ID, lane, secs_on_bridge};
+    State state = Waiting;
+    Car car = {speed, breaks, position, length, speed_limit, speed_limit_time, time_driving, acceleration, safe_distance, ID, lane, secs_on_bridge, state};
     return car;
 }
 
