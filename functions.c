@@ -223,3 +223,7 @@ Car check_light(Traffic_light light, Car car) {
 }
   return car;
 }
+
+double rand_uniform(double min, double max){
+  return (max - min) * ( (double)rand() / (double)RAND_MAX ) + min;
+}

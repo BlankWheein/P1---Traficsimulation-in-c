@@ -4,6 +4,9 @@
 #include <windows.h>
 
 #include "functions.c"
+#include "structs.h"
+
+
 
 int main(void) {
 
