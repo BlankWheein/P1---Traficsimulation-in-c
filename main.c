@@ -17,7 +17,7 @@ int main(void) {
   Vehicle *cars = Create_allocate_cars(cars_int);
   int lights_int = 2;
   Road road = create_road(50, Car_lane, 670);
-  Traffic_light lights[] = {create_light(red, 1, 25, 23), create_light(red, 300, 100, 10)};
+  Traffic_light lights[] = {create_light(red, 1, 25, 23), create_light(red, 300, 1500, 600)};
   int done = 0;
   int secs = 0;
   double vehicles = 0;
@@ -47,7 +47,7 @@ int main(void) {
       }
       secs += 1;
 
-      if (secs % 10230 == 0) {
+      if (secs % 100 == 0) {
         system("cls");
         for (int i = 0; i < lights_int; i++) {
             printf("%s, %d, %.1lf\n", color_to_string(lights[i].color), lights[i].timer, lights[i].position);

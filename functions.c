@@ -97,7 +97,7 @@ int check_if_safe_distance(Vehicle car, Vehicle car_in_front) {
       return 1;
     }
 
-    double delta = car_in_front.position - car.position -1;
+    double delta = car_in_front.position - car.position -2.2;
     if (delta > car.safe_distance)
     {
       return 1;
@@ -115,7 +115,7 @@ void print_all_vechile(Vehicle car) {
         if (car.ID % 2 == 1) {
           printf("\n");
         }
-        printf("Vehicle(%d): Speed: %.3lf(%.1lf), position: %.2lf, secs_on_bridge: %d, speed_limit: %.1lf, acceleration: %.3lf, safe_distance: %.2lf, State: %s\n", car.ID, car.speed, ms_to_kmt(car.speed), car.position, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.acceleration, car.safe_distance, state_to_string(car.state));
+        printf("Vehicle(%d:%s): Speed: %.3lf(%.1lf), position: %.2lf, secs_on_bridge: %d, speed_limit: %.1lf, acceleration: %.3lf, safe_distance: %.2lf, State: %s\n", car.ID,type_to_string(car.type), car.speed, ms_to_kmt(car.speed), car.position, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.acceleration, car.safe_distance, state_to_string(car.state));
 }
 
 void print_vehicles(Vehicle *cars, int cars_int) {
