@@ -109,7 +109,7 @@ void print_vehicle(Vehicle car) {
     if (car.ID % 2 == 1) {
       printf("\n");
     }
-    printf("Vehicle(%d:%s): Speed: %.3lf(%.1lf), position: %.2lf, secs_on_bridge: %d, speed_limit: %.1lf, acceleration: %.3lf, safe_distance: %.2lf, State: %s\n", car.ID, type_to_string(car.type),car.speed, ms_to_kmt(car.speed), car.position, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.acceleration, car.safe_distance, state_to_string(car.state));
+    printf("Vehicle(%d:%s): Speed: %.3lf(%.1lf), position: %.2lf, secs_on_bridge: %d, speed_limit: %.1lf, acceleration: %.3lf, safe_distance: %.2lf, Lane: %d, State: %s\n", car.ID, type_to_string(car.type),car.speed, ms_to_kmt(car.speed), car.position, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.acceleration, car.safe_distance, car.lane, state_to_string(car.state));
 
   }
     }
@@ -247,7 +247,7 @@ Vehicle create_vehicle(int id, int dist, double speed_limit_) {
     double acceleration = 0;
     double safe_distance = 1;
     int ID = id;
-    int lane = 1;
+    int lane = 0;
     int secs_on_bridge = 0;
     State state = Waiting;
 
