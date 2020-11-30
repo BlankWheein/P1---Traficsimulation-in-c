@@ -16,7 +16,7 @@ Car accelerate_car(Car car, Road road){
   return car;
 }
 
-Car state_waiting(Car car, Car cars[], int cars_int, Road road, Traffic_light lights[], int lights_int) {
+Car state_waiting(Car car, Car *cars, int cars_int, Road road, Traffic_light lights[], int lights_int) {
   Car closest = get_nearest_car(car, cars, cars_int);
   int is_safe = check_if_safe_distance(car, closest);
   if (is_safe == 1) {
@@ -27,12 +27,12 @@ return car;
 }
 
 
-Car state_driving(Car car, Car cars[], int cars_int, Road road, Traffic_light lights[], int lights_int) {
+Car state_driving(Car car, Car *cars, int cars_int, Road road, Traffic_light lights[], int lights_int) {
   car = set_car_acceleration(car);
   Car closest = get_nearest_car(car, cars, cars_int);
   car = set_safe_distance(car);
   Traffic_light light = nearest_traffic_light(car, lights, lights_int);
-  printf("%s, %d, %.1lf\n", color_to_string(light.color), light.timer, light.position);
+
 
 
   int is_safe = check_if_safe_distance(car, closest);
@@ -68,7 +68,7 @@ Car state_driving(Car car, Car cars[], int cars_int, Road road, Traffic_light li
 }
 
 
-Car drive(Car car, Car cars[], int cars_int, Road road, Traffic_light lights[], int lights_int) {
+Car drive(Car car, Car *cars, int cars_int, Road road, Traffic_light lights[], int lights_int) {
    if (car.state == Waiting) {
 car = state_waiting(car, cars, cars_int, road, lights, lights_int);
    } else if(car.state == Driving) {
@@ -105,12 +105,33 @@ int check_if_safe_distance(Car car, Car car_in_front) {
     return 0;
 }
 void print_car(Car car) {
+  if (car.state != Done) {
+    if (car.ID % 2 == 1) {
+      printf("\n");
+    }
     printf("Car(%d): Speed: %.3lf(%.1lf), position: %.2lf, secs_on_bridge: %d, speed_limit: %.1lf, acceleration: %.3lf, safe_distance: %.2lf, State: %s\n", car.ID, car.speed, ms_to_kmt(car.speed), car.position, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.acceleration, car.safe_distance, state_to_string(car.state));
+
+  }
+    }
+
+void print_all_car(Car car) {
+        if (car.ID % 2 == 1) {
+          printf("\n");
+        }
+        printf("Car(%d): Speed: %.3lf(%.1lf), position: %.2lf, secs_on_bridge: %d, speed_limit: %.1lf, acceleration: %.3lf, safe_distance: %.2lf, State: %s\n", car.ID, car.speed, ms_to_kmt(car.speed), car.position, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.acceleration, car.safe_distance, state_to_string(car.state));
 }
 
 void print_cars(Car *cars, int cars_int) {
+
     for (int i = 0; i < cars_int; i++) {
         print_car(cars[i]);
+    }
+}
+
+void print_all_cars(Car *cars, int cars_int) {
+
+    for (int i = 0; i < cars_int; i++) {
+        print_all_car(cars[i]);
     }
 }
 
@@ -211,7 +232,7 @@ Car create_car(int id, int dist, double speed_limit_) {
     return car;
 }
 
-Car get_nearest_car(Car car, Car cars[], int cars_int) {
+Car get_nearest_car(Car car, Car *cars, int cars_int) {
     Car closest = create_car(-1, 99999999, 160);
     if (cars_int < 1) {
         return closest;
@@ -230,25 +251,34 @@ Car create_random_car(int id) {
   return car;
 }
 
+Car * randomize_cars(Car *cars,int m, int n) {
+  int id = m;
+  for (int i = m; i < n; i++) {
+    id += 1;
+    cars[i] = create_random_car(id);
+  }
+  return cars;
+}
+
 Car * Create_allocate_cars(int n) {
  Car *cars = malloc(sizeof(Car) * n);
- int id = 0;
- for (int i = 0; i < n; i++) {
-   id += 1;
-   cars[i] = create_random_car(id);
- }
+ cars = randomize_cars(cars, 0, n);
  return cars;
 }
 
 Car * Realloc_cars(Car *ptr, int *cars_int, int new) {
-  ptr =(Car *) realloc(ptr, *cars_int + new);
-int id = *cars_int;
+  Car *cars = malloc(sizeof(Car) * (*cars_int + new));
+  for (int i = 0; i < *cars_int; i++) {
+    cars[i] = ptr[i];
+  }
+  free(ptr);
+  int id = *cars_int;
   for (int i = *cars_int; i < *cars_int + new; i++) {
-      id += 1;
-    ptr[i] = create_random_car(id);
+    id += 1;
+    cars[i] = create_random_car(id);
   }
   *cars_int += new;
-  return ptr;
+  return cars;
 }
 
 Car check_light(Traffic_light light, Car car, Car closest) {
@@ -264,8 +294,6 @@ Car check_light(Traffic_light light, Car car, Car closest) {
     }
     if (light.position - car.position < 10) {
       car.speed = 0;
-
-      printf("Setting speed to 0\n");
     }
     if (car.speed == 0 && car.position > 1) {
       car.state = HoldingForRed;

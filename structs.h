@@ -4,6 +4,7 @@
 typedef enum {green, red, dummy} Light_color;
 typedef enum {Bus_lane, Car_lane} Lane_type;
 typedef enum {Waiting, Driving, Done, HoldingForRed, Mock} State;
+typedef enum {Car, Bus} Type;
 
 typedef struct  {
   Light_color color;
