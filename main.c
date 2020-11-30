@@ -2,27 +2,30 @@
 #include <stdlib.h>
 #include <time.h>
 #include <windows.h>
+#include <math.h>
 
 #include "structs.h"
 #include "functions.c"
 
 int main(void) {
 
+
   srand(time(NULL));
+  double vehicles_per_hour = (709.0)/60.0*30.0/60.0;
+  printf("%lf", vehicles_per_hour);
   int cars_int = 1;
   Vehicle *cars = Create_allocate_cars(cars_int);
-  cars = Realloc_cars(cars, &cars_int, 1);
   int lights_int = 2;
   Road road = create_road(50, Car_lane, 670);
-  Traffic_light lights[] = {create_light(red, 1, 25, 23), create_light(red, 300, 10, 100)};
+  Traffic_light lights[] = {create_light(red, 1, 25, 23), create_light(red, 300, 100, 10)};
   int done = 0;
   int secs = 0;
+  double vehicles = 0;
 
   while(!done) {
       done = 1;
-
-      if (secs % 34 == 0 && secs > 1 && secs < 60*60) {
-        cars = Realloc_cars(cars, &cars_int, 2);
+      if (secs % 30 == 0 && secs < 60*60 && secs > 1) {
+        cars = Realloc_cars(cars, &cars_int, (int)ceil(vehicles_per_hour));
       }
 
       for(int i = 0; i < cars_int; i++) {
@@ -44,7 +47,7 @@ int main(void) {
       }
       secs += 1;
 
-      if (secs % 1 == 0) {
+      if (secs % 10230 == 0) {
         system("cls");
         for (int i = 0; i < lights_int; i++) {
             printf("%s, %d, %.1lf\n", color_to_string(lights[i].color), lights[i].timer, lights[i].position);
