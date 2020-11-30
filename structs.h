@@ -30,7 +30,8 @@ typedef struct {
   int lane;
   int secs_on_bridge;
   State state;
-} Car;
+  Type type;
+} Vehicle;
 
 typedef struct {
   double speed_limit;

@@ -1,11 +1,11 @@
 #include "functions.h"
 #include "structs.h"
-Car set_car_acceleration(Car car){
+Vehicle set_car_acceleration(Vehicle car){
   car.acceleration = (2 * (1 - (car.time_driving/car.speed_limit_time)) * (car.speed_limit - 0)) / car.speed_limit_time;
   return car;
 }
 
-Car accelerate_car(Car car, Road road){
+Vehicle accelerate_car(Vehicle car, Road road){
   car.speed += car.acceleration;
   if (car.speed > car.speed_limit) {
     car.speed = car.speed_limit;
@@ -16,8 +16,8 @@ Car accelerate_car(Car car, Road road){
   return car;
 }
 
-Car state_waiting(Car car, Car *cars, int cars_int, Road road, Traffic_light lights[], int lights_int) {
-  Car closest = get_nearest_car(car, cars, cars_int);
+Vehicle state_waiting(Vehicle car, Vehicle *cars, int cars_int, Road road, Traffic_light lights[], int lights_int) {
+  Vehicle closest = get_nearest_car(car, cars, cars_int);
   int is_safe = check_if_safe_distance(car, closest);
   if (is_safe == 1) {
    car.state = Driving;
@@ -27,9 +27,9 @@ return car;
 }
 
 
-Car state_driving(Car car, Car *cars, int cars_int, Road road, Traffic_light lights[], int lights_int) {
+Vehicle state_driving(Vehicle car, Vehicle *cars, int cars_int, Road road, Traffic_light lights[], int lights_int) {
   car = set_car_acceleration(car);
-  Car closest = get_nearest_car(car, cars, cars_int);
+  Vehicle closest = get_nearest_car(car, cars, cars_int);
   car = set_safe_distance(car);
   Traffic_light light = nearest_traffic_light(car, lights, lights_int);
 
@@ -68,7 +68,7 @@ Car state_driving(Car car, Car *cars, int cars_int, Road road, Traffic_light lig
 }
 
 
-Car drive(Car car, Car *cars, int cars_int, Road road, Traffic_light lights[], int lights_int) {
+Vehicle drive(Vehicle car, Vehicle *cars, int cars_int, Road road, Traffic_light lights[], int lights_int) {
    if (car.state == Waiting) {
 car = state_waiting(car, cars, cars_int, road, lights, lights_int);
    } else if(car.state == Driving) {
@@ -87,12 +87,12 @@ double ms_to_kmt(double x){
 double kmt_to_ms(double x){
   return x / 3.6;
 }
-Car set_safe_distance(Car car) {
+Vehicle set_safe_distance(Vehicle car) {
     car.safe_distance = (ms_to_kmt(car.speed) / 2) + 1;
     return car;
 }
 
-int check_if_safe_distance(Car car, Car car_in_front) {
+int check_if_safe_distance(Vehicle car, Vehicle car_in_front) {
     if (car_in_front.state == Mock) {
       return 1;
     }
@@ -104,34 +104,34 @@ int check_if_safe_distance(Car car, Car car_in_front) {
     }
     return 0;
 }
-void print_car(Car car) {
+void print_vehicle(Vehicle car) {
   if (car.state != Done) {
     if (car.ID % 2 == 1) {
       printf("\n");
     }
-    printf("Car(%d): Speed: %.3lf(%.1lf), position: %.2lf, secs_on_bridge: %d, speed_limit: %.1lf, acceleration: %.3lf, safe_distance: %.2lf, State: %s\n", car.ID, car.speed, ms_to_kmt(car.speed), car.position, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.acceleration, car.safe_distance, state_to_string(car.state));
+    printf("Vehicle(%d:%s): Speed: %.3lf(%.1lf), position: %.2lf, secs_on_bridge: %d, speed_limit: %.1lf, acceleration: %.3lf, safe_distance: %.2lf, State: %s\n", car.ID, type_to_string(car.type),car.speed, ms_to_kmt(car.speed), car.position, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.acceleration, car.safe_distance, state_to_string(car.state));
 
   }
     }
 
-void print_all_car(Car car) {
+void print_all_vechile(Vehicle car) {
         if (car.ID % 2 == 1) {
           printf("\n");
         }
-        printf("Car(%d): Speed: %.3lf(%.1lf), position: %.2lf, secs_on_bridge: %d, speed_limit: %.1lf, acceleration: %.3lf, safe_distance: %.2lf, State: %s\n", car.ID, car.speed, ms_to_kmt(car.speed), car.position, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.acceleration, car.safe_distance, state_to_string(car.state));
+        printf("Vehicle(%d): Speed: %.3lf(%.1lf), position: %.2lf, secs_on_bridge: %d, speed_limit: %.1lf, acceleration: %.3lf, safe_distance: %.2lf, State: %s\n", car.ID, car.speed, ms_to_kmt(car.speed), car.position, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.acceleration, car.safe_distance, state_to_string(car.state));
 }
 
-void print_cars(Car *cars, int cars_int) {
+void print_vehicles(Vehicle *cars, int cars_int) {
 
     for (int i = 0; i < cars_int; i++) {
-        print_car(cars[i]);
+        print_vehicle(cars[i]);
     }
 }
 
-void print_all_cars(Car *cars, int cars_int) {
+void print_all_vechiles(Vehicle *cars, int cars_int) {
 
     for (int i = 0; i < cars_int; i++) {
-        print_all_car(cars[i]);
+        print_all_vechile(cars[i]);
     }
 }
 
@@ -146,6 +146,20 @@ char* color_to_string(Light_color color) {
     break;
   case dummy:
     return "Dummy";
+    break;
+  default:
+    break;
+  }
+}
+
+char* type_to_string(Type type) {
+  switch (type)
+  {
+  case Car:
+    return "Car";
+    break;
+  case Bus:
+    return "Bus";
     break;
   default:
     break;
@@ -200,7 +214,7 @@ Traffic_light count_timer(Traffic_light light) {
   return light;
 }
 
-Traffic_light nearest_traffic_light(Car car, Traffic_light lights[], int lights_int) {
+Traffic_light nearest_traffic_light(Vehicle car, Traffic_light lights[], int lights_int) {
   int i;
   Traffic_light nearest_light = {dummy, 99999, 0, 0, 0};
   if (lights_int < 1) {
@@ -214,7 +228,15 @@ Traffic_light nearest_traffic_light(Car car, Traffic_light lights[], int lights_
   return nearest_light;
 }
 
-Car create_car(int id, int dist, double speed_limit_) {
+Vehicle create_vehicle(int id, int dist, double speed_limit_) {
+    Type type;
+    double chance = rand_uniform(0, 100);
+    if (chance >= 50) {
+      type = Car;
+    } else {
+      type = Bus;
+    }
+
     double speed = 0;
     double breaks = 0;
     double position = dist;
@@ -228,12 +250,13 @@ Car create_car(int id, int dist, double speed_limit_) {
     int lane = 1;
     int secs_on_bridge = 0;
     State state = Waiting;
-    Car car = {speed, breaks, position, length, speed_limit, speed_limit_time, time_driving, acceleration, safe_distance, ID, lane, secs_on_bridge, state};
+
+    Vehicle car = {speed, breaks, position, length, speed_limit, speed_limit_time, time_driving, acceleration, safe_distance, ID, lane, secs_on_bridge, state, type};
     return car;
 }
 
-Car get_nearest_car(Car car, Car *cars, int cars_int) {
-    Car closest = create_car(-1, 99999999, 160);
+Vehicle get_nearest_car(Vehicle car, Vehicle *cars, int cars_int) {
+    Vehicle closest = create_vehicle(-1, 99999999, 160);
     if (cars_int < 1) {
         return closest;
     }
@@ -245,29 +268,29 @@ Car get_nearest_car(Car car, Car *cars, int cars_int) {
     return closest;
 }
 
-Car create_random_car(int id) {
+Vehicle create_random_vehicle(int id) {
   double speed_limit = rand_uniform(170, 250);
-  Car car = create_car(id, 0, speed_limit);
+  Vehicle car = create_vehicle(id, 0, speed_limit);
   return car;
 }
 
-Car * randomize_cars(Car *cars,int m, int n) {
+Vehicle * randomize_cars(Vehicle *cars,int m, int n) {
   int id = m;
   for (int i = m; i < n; i++) {
     id += 1;
-    cars[i] = create_random_car(id);
+    cars[i] = create_random_vehicle(id);
   }
   return cars;
 }
 
-Car * Create_allocate_cars(int n) {
- Car *cars = malloc(sizeof(Car) * n);
+Vehicle * Create_allocate_cars(int n) {
+ Vehicle *cars = malloc(sizeof(Vehicle) * n);
  cars = randomize_cars(cars, 0, n);
  return cars;
 }
 
-Car * Realloc_cars(Car *ptr, int *cars_int, int new) {
-  Car *cars = malloc(sizeof(Car) * (*cars_int + new));
+Vehicle * Realloc_cars(Vehicle *ptr, int *cars_int, int new) {
+  Vehicle *cars = malloc(sizeof(Vehicle) * (*cars_int + new));
   for (int i = 0; i < *cars_int; i++) {
     cars[i] = ptr[i];
   }
@@ -275,13 +298,13 @@ Car * Realloc_cars(Car *ptr, int *cars_int, int new) {
   int id = *cars_int;
   for (int i = *cars_int; i < *cars_int + new; i++) {
     id += 1;
-    cars[i] = create_random_car(id);
+    cars[i] = create_random_vehicle(id);
   }
   *cars_int += new;
   return cars;
 }
 
-Car check_light(Traffic_light light, Car car, Car closest) {
+Vehicle check_light(Traffic_light light, Vehicle car, Vehicle closest) {
   if (light.color == red) {
     if (light.position - car.position < 30) {
       car.speed = 5;
