@@ -161,3 +161,7 @@ int check_light(Traffic_light light) {
   int drive = light.color == green ? 1 : 0;
   return drive;
 }
+
+double rand_uniform(double min, double max){
+  return (max - min) * ( (double)rand() / (double)RAND_MAX ) + min;
+}
