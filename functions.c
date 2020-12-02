@@ -27,7 +27,6 @@ Vehicle state_waiting(Vehicle car, Vehicle *cars, int cars_int, Road roads[], Tr
 return car;
 }
 
-
 Vehicle state_driving(Vehicle car, Vehicle *cars, int cars_int, Road roads[], Traffic_light lights[], int lights_int) {
   car = set_car_acceleration(car);
   Vehicle closest = get_nearest_car(car, cars, cars_int, roads);
@@ -329,4 +328,25 @@ Vehicle check_light(Traffic_light light, Vehicle car, Vehicle closest) {
 
 double rand_uniform(double min, double max){
   return (max - min) * ( (double)rand() / (double)RAND_MAX ) + min;
+}
+
+void print_traffic_light(Traffic_light lights[], int a) {
+  for (int i = 0; i < a; i++) {
+    if (lights[i].position > 1) {
+      if (color_to_string(lights[i].color) == "Red") {
+      printf("Position: %.0lf Color: %s   Timer: %d/%d\n", lights[i].position, color_to_string(lights[i].color), lights[i].timer, lights[i].timer_red);
+      }
+      else {
+      printf("Position: %.0lf Color: %s Timer: %d/%d\n", lights[i].position, color_to_string(lights[i].color), lights[i].timer, lights[i].timer_green);
+      }
+    }
+    else {
+      if (color_to_string(lights[i].color) == "Red") {
+      printf("Position:   %.0lf Color: %s   Timer: %d/%d\n", lights[i].position, color_to_string(lights[i].color), lights[i].timer, lights[i].timer_red);
+      }
+      else {
+      printf("Position:   %.0lf Color: %s Timer: %d/%d\n", lights[i].position, color_to_string(lights[i].color), lights[i].timer, lights[i].timer_green);
+      }
+    }
+  }  
 }

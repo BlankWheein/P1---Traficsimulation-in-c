@@ -14,11 +14,14 @@ int main(void) {
   double vehicles_per_hour = (709.0)/60.0*30.0/60.0;
   printf("%lf", vehicles_per_hour);
   
+  int cars_int = 1;
+  int lights_int = 2;
   int lights_int = 3;
   Road roads[] = {create_road(50, Car, 670), create_road(50, Car, 670), create_road(20, PlusBus, 670)};
   Traffic_light lights[] = {create_light(red, 1, 59, 60), create_light(red, 300, 1500, 100), create_light(red, 300, 60, 30)};
-  int cars_int = 1;
+  Traffic_light lights[] = {create_light(red, 1, 25, 23), create_light(red, 300, 1500, 50)};
   Vehicle *cars = Create_allocate_cars(cars_int, roads);
+  
   int done = 0;
   int secs = 0;
   double vehicles = 0;
@@ -50,15 +53,15 @@ int main(void) {
 
       if (secs % 1 == 0) {
         system("cls");
-        for (int i = 0; i < lights_int; i++) {
-            printf("%s, %d, %.1lf\n", color_to_string(lights[i].color), lights[i].timer, lights[i].position);
-        }
+        print_traffic_light(lights, lights_int);
         print_vehicles(cars, cars_int);
       }
 
   }
   system("cls");
   print_all_vechiles(cars, cars_int);
+
+  print_traffic_light(lights, lights_int);
 
 
   /*
