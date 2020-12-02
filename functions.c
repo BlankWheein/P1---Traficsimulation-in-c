@@ -1,34 +1,35 @@
 #include "functions.h"
 #include "structs.h"
+#define ROAD_COUNT 3
 Vehicle set_car_acceleration(Vehicle car){
   car.acceleration = (2 * (1 - (car.time_driving/car.speed_limit_time)) * (car.speed_limit - 0)) / car.speed_limit_time;
   return car;
 }
 
-Vehicle accelerate_car(Vehicle car, Road road){
+Vehicle accelerate_car(Vehicle car, Road roads[]){
   car.speed += car.acceleration;
   if (car.speed > car.speed_limit) {
     car.speed = car.speed_limit;
   }
-  if (car.speed > road.speed_limit) {
-    car.speed = road.speed_limit;
+  if (car.speed > roads[car.lane].speed_limit) {
+    car.speed = roads[car.lane].speed_limit;
   }
   return car;
 }
 
-Vehicle state_waiting(Vehicle car, Vehicle *cars, int cars_int, Road road, Traffic_light lights[], int lights_int) {
-  Vehicle closest = get_nearest_car(car, cars, cars_int);
+Vehicle state_waiting(Vehicle car, Vehicle *cars, int cars_int, Road roads[], Traffic_light lights[], int lights_int) {
+  Vehicle closest = get_nearest_car(car, cars, cars_int, roads);
   int is_safe = check_if_safe_distance(car, closest);
   if (is_safe == 1) {
    car.state = Driving;
-   car = state_driving(car, cars, cars_int, road, lights, lights_int);
+   car = state_driving(car, cars, cars_int, roads, lights, lights_int);
  }
 return car;
 }
 
-Vehicle state_driving(Vehicle car, Vehicle *cars, int cars_int, Road road, Traffic_light lights[], int lights_int) {
+Vehicle state_driving(Vehicle car, Vehicle *cars, int cars_int, Road roads[], Traffic_light lights[], int lights_int) {
   car = set_car_acceleration(car);
-  Vehicle closest = get_nearest_car(car, cars, cars_int);
+  Vehicle closest = get_nearest_car(car, cars, cars_int, roads);
   car = set_safe_distance(car);
   Traffic_light light = nearest_traffic_light(car, lights, lights_int);
 
@@ -37,7 +38,7 @@ Vehicle state_driving(Vehicle car, Vehicle *cars, int cars_int, Road road, Traff
   int is_safe = check_if_safe_distance(car, closest);
 
   if (is_safe == 1) {
-      car = accelerate_car(car, road);
+      car = accelerate_car(car, roads);
       if (car.state == HoldingForRed) {
         car.state = Driving;
       }
@@ -60,20 +61,20 @@ Vehicle state_driving(Vehicle car, Vehicle *cars, int cars_int, Road road, Traff
   if (car.position > 0) {
       car.secs_on_bridge += 1;
   }
-  if (car.position > road.length) {
+  if (car.position > roads[car.lane].length) {
       car.state = Done;
   }
   return car;
 }
 
 
-Vehicle drive(Vehicle car, Vehicle *cars, int cars_int, Road road, Traffic_light lights[], int lights_int) {
+Vehicle drive(Vehicle car, Vehicle *cars, int cars_int, Road roads[], Traffic_light lights[], int lights_int) {
    if (car.state == Waiting) {
-car = state_waiting(car, cars, cars_int, road, lights, lights_int);
+car = state_waiting(car, cars, cars_int, roads, lights, lights_int);
    } else if(car.state == Driving) {
-     car = state_driving(car, cars, cars_int, road, lights, lights_int);
+     car = state_driving(car, cars, cars_int, roads, lights, lights_int);
    } else if(car.state == HoldingForRed) {
-     car = state_driving(car, cars, cars_int, road, lights, lights_int);
+     car = state_driving(car, cars, cars_int, roads, lights, lights_int);
    }
  return car;
 }
@@ -105,7 +106,7 @@ int check_if_safe_distance(Vehicle car, Vehicle car_in_front) {
 }
 void print_vehicle(Vehicle car) {
   if (car.state != Done) {
-    printf("Vehicle(%d:%s): Speed: %.3lf(%.1lf), position: %.2lf, secs_on_bridge: %d, speed_limit: %.1lf, acceleration: %.3lf, safe_distance: %.2lf, Lane: %d, State: %s\n", car.ID, type_to_string(car.type),car.speed, ms_to_kmt(car.speed), car.position, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.acceleration, car.safe_distance, car.lane, state_to_string(car.state));
+    printf("Vehicle(%d:%s): Speed: %.3lf(%.1lf), position: %.2lf, secs_on_bridge: %d, speed_limit: %.1lf, acceleration: %.3lf, safe_distance: %.2lf, Lane: %d, State: %s\n", car.ID, lane_to_string(car.type),car.speed, ms_to_kmt(car.speed), car.position, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.acceleration, car.safe_distance, car.lane, state_to_string(car.state));
 
   }
     }
@@ -114,7 +115,7 @@ void print_all_vechile(Vehicle car) {
         if (car.ID % 2 == 1) {
           printf("\n");
         }
-        printf("Vehicle(%d:%s): Speed: %.3lf(%.1lf), position: %.2lf, secs_on_bridge: %d, speed_limit: %.1lf, acceleration: %.3lf, safe_distance: %.2lf, State: %s\n", car.ID,type_to_string(car.type), car.speed, ms_to_kmt(car.speed), car.position, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.acceleration, car.safe_distance, state_to_string(car.state));
+        printf("Vehicle(%d:%s): Speed: %.3lf(%.1lf), position: %.2lf, secs_on_bridge: %d, speed_limit: %.1lf, acceleration: %.3lf, safe_distance: %.2lf, State: %s\n", car.ID,lane_to_string(car.type), car.speed, ms_to_kmt(car.speed), car.position, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.acceleration, car.safe_distance, state_to_string(car.state));
 }
 
 void print_vehicles(Vehicle *cars, int cars_int) {
@@ -148,14 +149,14 @@ char* color_to_string(Light_color color) {
   }
 }
 
-char* type_to_string(Type type) {
+char* lane_to_string(Lane_type type) {
   switch (type)
   {
   case Car:
     return "Car";
     break;
-  case Bus:
-    return "Bus";
+  case PlusBus:
+    return "Plus Bus";
     break;
   default:
     break;
@@ -224,15 +225,20 @@ Traffic_light nearest_traffic_light(Vehicle car, Traffic_light lights[], int lig
   return nearest_light;
 }
 
-Vehicle create_vehicle(int id, int dist, double speed_limit_) {
-    Type type;
+Vehicle create_vehicle(int id, int dist, double speed_limit_, Road roads[]) {
+    Lane_type type;
     double chance = rand_uniform(0, 100);
     if (chance >= 50) {
       type = Car;
     } else {
-      type = Bus;
+      type = PlusBus;
     }
 
+    int lane;
+    do {
+    lane = rand() % ROAD_COUNT; 
+    } while (roads[lane].lane_type != type);
+    
     double speed = 0;
     double breaks = 0;
     double position = dist;
@@ -243,7 +249,6 @@ Vehicle create_vehicle(int id, int dist, double speed_limit_) {
     double acceleration = 0;
     double safe_distance = 1;
     int ID = id;
-    int lane = 0;
     int secs_on_bridge = 0;
     State state = Waiting;
 
@@ -251,8 +256,8 @@ Vehicle create_vehicle(int id, int dist, double speed_limit_) {
     return car;
 }
 
-Vehicle get_nearest_car(Vehicle car, Vehicle *cars, int cars_int) {
-    Vehicle closest = create_vehicle(-1, 99999999, 160);
+Vehicle get_nearest_car(Vehicle car, Vehicle *cars, int cars_int, Road roads[]) {
+    Vehicle closest = create_vehicle(-1, 99999999, 160, roads);
     if (cars_int < 1) {
         return closest;
     }
@@ -264,28 +269,28 @@ Vehicle get_nearest_car(Vehicle car, Vehicle *cars, int cars_int) {
     return closest;
 }
 
-Vehicle create_random_vehicle(int id) {
+Vehicle create_random_vehicle(int id, Road roads[]) {
   double speed_limit = rand_uniform(170, 250);
-  Vehicle car = create_vehicle(id, 0, speed_limit);
+  Vehicle car = create_vehicle(id, 0, speed_limit, roads);
   return car;
 }
 
-Vehicle * randomize_cars(Vehicle *cars,int m, int n) {
+Vehicle * randomize_cars(Vehicle *cars,int m, int n, Road roads[]) {
   int id = m;
   for (int i = m; i < n; i++) {
     id += 1;
-    cars[i] = create_random_vehicle(id);
+    cars[i] = create_random_vehicle(id, roads);
   }
   return cars;
 }
 
-Vehicle * Create_allocate_cars(int n) {
+Vehicle * Create_allocate_cars(int n, Road roads[]) {
  Vehicle *cars = malloc(sizeof(Vehicle) * n);
- cars = randomize_cars(cars, 0, n);
+ cars = randomize_cars(cars, 0, n, roads);
  return cars;
 }
 
-Vehicle * Realloc_cars(Vehicle *ptr, int *cars_int, int new) {
+Vehicle * Realloc_cars(Vehicle *ptr, int *cars_int, int new, Road roads[]) {
   Vehicle *cars = malloc(sizeof(Vehicle) * (*cars_int + new));
   for (int i = 0; i < *cars_int; i++) {
     cars[i] = ptr[i];
@@ -294,7 +299,7 @@ Vehicle * Realloc_cars(Vehicle *ptr, int *cars_int, int new) {
   int id = *cars_int;
   for (int i = *cars_int; i < *cars_int + new; i++) {
     id += 1;
-    cars[i] = create_random_vehicle(id);
+    cars[i] = create_random_vehicle(id, roads);
   }
   *cars_int += new;
   return cars;

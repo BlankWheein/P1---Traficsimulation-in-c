@@ -13,11 +13,15 @@ int main(void) {
   srand(time(NULL));
   double vehicles_per_hour = (709.0)/60.0*30.0/60.0;
   printf("%lf", vehicles_per_hour);
+  
   int cars_int = 1;
-  Vehicle *cars = Create_allocate_cars(cars_int);
   int lights_int = 2;
-  Road road = create_road(50, Car_lane, 670);
+  int lights_int = 3;
+  Road roads[] = {create_road(50, Car, 670), create_road(50, Car, 670), create_road(20, PlusBus, 670)};
+  Traffic_light lights[] = {create_light(red, 1, 59, 60), create_light(red, 300, 1500, 100), create_light(red, 300, 60, 30)};
   Traffic_light lights[] = {create_light(red, 1, 25, 23), create_light(red, 300, 1500, 50)};
+  Vehicle *cars = Create_allocate_cars(cars_int, roads);
+  
   int done = 0;
   int secs = 0;
   double vehicles = 0;
@@ -25,11 +29,11 @@ int main(void) {
   while(!done) {
       done = 1;
       if (secs % 30 == 0 && secs < 60*60 && secs > 1) {
-        cars = Realloc_cars(cars, &cars_int, (int)ceil(vehicles_per_hour));
+        cars = Realloc_cars(cars, &cars_int, (int)ceil(vehicles_per_hour), roads);
       }
 
       for(int i = 0; i < cars_int; i++) {
-          cars[i] = drive(cars[i], cars, cars_int, road, lights, lights_int);
+          cars[i] = drive(cars[i], cars, cars_int, roads, lights, lights_int);
           if (cars[i].ID == -1) {
               cars_int += 1;
           }
