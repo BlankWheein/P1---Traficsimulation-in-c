@@ -8,6 +8,7 @@ void print_vehicles(Vehicle *cars, int cars_int);
 Vehicle * Realloc_cars(Vehicle *ptr, int *cars_int, int new);
 void print_all_vechile(Vehicle car);
 void print_all_vechiles(Vehicle *cars, int cars_int);
+void print_traffic_light(Traffic_light lights[], int a);
 
 
 Vehicle set_car_acceleration(Vehicle car);
