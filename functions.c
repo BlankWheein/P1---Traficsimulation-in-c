@@ -71,13 +71,13 @@ void prompt(double *thru_put, int *iter_speed){
   do{
     system("cls");
     printf("What thru-put do u want per hour? ");
-    scanf(" %lf", &*thru_put);
+    scanf(" %lf", thru_put);
   }while(*thru_put < 0);
 
   do{
     system("cls");
-    printf("\nWhat iteration speed do u want? (1: real time, 50: fast, 9999999: fast as fuck boi) ");
-    scanf(" %d", &*iter_speed);
+    printf("\nWhat iteration speed do u want? (1: slow, 50: fast, 9999999: fast as fuck boi) ");
+    scanf(" %d", iter_speed);
   }while(*iter_speed < 0);
 
 }
@@ -91,7 +91,12 @@ car = state_waiting(car, cars, cars_int, roads, lights, lights_int);
    } else if(car.state == HoldingForRed) {
      car = state_driving(car, cars, cars_int, roads, lights, lights_int);
    }
- return car;
+
+if (car.position > 0 && car.position < roads[0].length) {
+  car.avg_speed_total += car.speed;
+}
+
+return car;
 }
 
 double ms_to_kmt(double x){
@@ -127,7 +132,7 @@ void print_vehicle(Vehicle car) {
     }
 
 void print_all_vechile(Vehicle car) {
-    printf("Vehicle(%d:%s): Lane: %d, secs_on_bridge: %d, speed_limit: %.1lf, acceleration: %.3lf\n", car.ID,lane_to_string(car.type), car.lane, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.acceleration);
+    printf("Vehicle(%d:%s): Lane: %d, secs_on_bridge: %d, speed_limit: %.1lf, avg_speed: %.3lf\n", car.ID,lane_to_string(car.type), car.lane, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.avg_speed);
 }
 
 void print_vehicles(Vehicle *cars, int cars_int) {
