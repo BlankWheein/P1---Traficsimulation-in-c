@@ -127,22 +127,28 @@ void print_vehicle(Vehicle car) {
     }
 
 void print_all_vechile(Vehicle car) {
-        if (car.ID % 2 == 1) {
-          printf("\n");
-        }
-        printf("Vehicle(%d:%s): Lane: %d, secs_on_bridge: %d, speed_limit: %.1lf, acceleration: %.3lf, State: %s\n", car.ID,lane_to_string(car.type), car.speed, car.lane, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.acceleration, state_to_string(car.state));
+    printf("Vehicle(%d:%s): Lane: %d, secs_on_bridge: %d, speed_limit: %.1lf, acceleration: %.3lf\n", car.ID,lane_to_string(car.type), car.lane, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.acceleration);
 }
 
 void print_vehicles(Vehicle *cars, int cars_int) {
-
+    int lane = 0;
     for (int i = 0; i < cars_int; i++) {
+      if (cars[i].lane > lane) {
+        printf("\n\n");
+        lane = cars[i].lane;
+      }
         print_vehicle(cars[i]);
+        
     }
 }
 
 void print_all_vechiles(Vehicle *cars, int cars_int) {
-
+int lane = 0;
     for (int i = 0; i < cars_int; i++) {
+      if (cars[i].lane > lane) {
+        printf("\n\n");
+        lane = cars[i].lane;
+      }
         print_all_vechile(cars[i]);
     }
 }
@@ -322,6 +328,9 @@ Vehicle * Create_allocate_cars(int n, Road roads[]) {
 int cmpfunc (const void * a, const void * b) {
    Vehicle l = *(const Vehicle *)a;
    Vehicle r = *(const Vehicle *)b;
+   if(l.lane == r.lane) {
+     return l.ID - r.ID;
+   }
    return l.lane - r.lane;
 }
 
@@ -331,9 +340,17 @@ void sort_lanes(Vehicle *cars, int cars_int){
     print_cars[i] = cars[i];
   }
   qsort(print_cars, cars_int, sizeof(Vehicle), cmpfunc);
+  print_vehicles(print_cars, cars_int);
+  free(print_cars);
+}
+
+void sort_lanes_done(Vehicle *cars, int cars_int){
+  Vehicle *print_cars = malloc(sizeof(Vehicle) * cars_int);
   for (int i = 0; i < cars_int; i++){
-    print_all_vechile(print_cars[i]);
+    print_cars[i] = cars[i];
   }
+  qsort(print_cars, cars_int, sizeof(Vehicle), cmpfunc);
+  print_all_vechiles(print_cars, cars_int);
   free(print_cars);
 }
 

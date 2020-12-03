@@ -9,7 +9,6 @@
 #include "functions.c"
 
 int main(void) {
-
   srand(time(NULL));
   double thru_put = 709.0;
   int iter_speed = 0;
@@ -19,9 +18,9 @@ int main(void) {
   printf("%lf", vehicles_per_hour);
   
   int cars_int = 1;
-  int lights_int = 2;
+  int lights_int = 3;
   Road roads[] = {create_road(50, Car, 670), create_road(50, Car, 670), create_road(20, PlusBus, 670)};
-  Traffic_light lights[] = {create_light(red, 1, 25, 23), create_light(red, 300, 1500, 50)};
+  Traffic_light lights[] = {create_light(red, 1, 30, 30), create_light(red, 300, 1500, 50), create_light(red, 650, 31, 31)};
   Vehicle *cars = Create_allocate_cars(cars_int, roads);
   
   int done = 0;
@@ -55,20 +54,13 @@ int main(void) {
 
       if (secs % iter_speed == 0) {
         system("cls");
+        
         print_traffic_light(lights, lights_int);
-        print_vehicles(cars, cars_int);
+        sort_lanes(cars, cars_int);
       }
 
   }
   system("cls");
-  print_all_vechiles(cars, cars_int);
-
-  print_traffic_light(lights, lights_int);
-
-
-  /*
-   input cars/hour
-  */
-
-    return 0;
+  sort_lanes_done(cars, cars_int);
+  return 0;
 }
