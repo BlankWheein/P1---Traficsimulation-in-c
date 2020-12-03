@@ -82,6 +82,15 @@ void prompt(double *thru_put, int *iter_speed){
 
 }
 
+void pnt_avg_speed_bridge(Vehicle *cars, int cars_int){
+  double collected_speed = 0.0, avg_speed = 0.0;
+  for (int i = 0; i < cars_int; i++){
+    collected_speed += cars[i].speed;
+  }
+
+  avg_speed = ms_to_kmt(collected_speed / (double) cars_int);
+  printf("AVERAGE SPEED: %.2lfkm/t\n", avg_speed);
+}
 
 Vehicle drive(Vehicle car, Vehicle *cars, int cars_int, Road roads[], Traffic_light lights[], int lights_int) {
    if (car.state == Waiting) {

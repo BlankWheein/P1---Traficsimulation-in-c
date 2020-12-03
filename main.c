@@ -54,7 +54,7 @@ int main(void) {
 
       if (secs % iter_speed == 0) {
         system("cls");
-        
+        pnt_avg_speed_bridge(cars, cars_int);
         print_traffic_light(lights, lights_int);
         sort_lanes(cars, cars_int);
       }
