@@ -115,7 +115,7 @@ void print_all_vechile(Vehicle car) {
         if (car.ID % 2 == 1) {
           printf("\n");
         }
-        printf("Vehicle(%d:%s): Speed: %.3lf(%.1lf), position: %.2lf, secs_on_bridge: %d, speed_limit: %.1lf, acceleration: %.3lf, safe_distance: %.2lf, State: %s\n", car.ID,lane_to_string(car.type), car.speed, ms_to_kmt(car.speed), car.position, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.acceleration, car.safe_distance, state_to_string(car.state));
+        printf("Vehicle(%d:%s): Lane: %d, secs_on_bridge: %d, speed_limit: %.1lf, acceleration: %.3lf, State: %s\n", car.ID,lane_to_string(car.type), car.speed, car.lane, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.acceleration, state_to_string(car.state));
 }
 
 void print_vehicles(Vehicle *cars, int cars_int) {
