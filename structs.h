@@ -13,8 +13,6 @@ typedef struct  {
   int timer_red;
 } Traffic_light;
 
-
-
 typedef struct {
   double speed;
   double breaks;
@@ -30,6 +28,8 @@ typedef struct {
   int secs_on_bridge;
   State state;
   Lane_type type;
+  double avg_speed;
+  double avg_speed_total;
 } Vehicle;
 
 typedef struct {

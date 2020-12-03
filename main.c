@@ -19,7 +19,7 @@ int main(void) {
   
   int cars_int = 1;
   int lights_int = 3;
-  Road roads[] = {create_road(50, Car, 670), create_road(50, Car, 670), create_road(20, PlusBus, 670)};
+  Road roads[] = {create_road(50, Car, 670), create_road(50, Car, 670), create_road(50, PlusBus, 670)};
   Traffic_light lights[] = {create_light(red, 1, 30, 30), create_light(red, 300, 1500, 50), create_light(red, 650, 31, 31)};
   Vehicle *cars = Create_allocate_cars(cars_int, roads);
   
@@ -61,6 +61,9 @@ int main(void) {
 
   }
   system("cls");
+  for (int i = 0; i < cars_int; i++) {
+    cars[i].avg_speed = ms_to_kmt(cars[i].avg_speed_total / cars[i].secs_on_bridge);
+  }
   sort_lanes_done(cars, cars_int);
   return 0;
 }
