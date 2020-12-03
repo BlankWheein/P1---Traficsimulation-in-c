@@ -10,6 +10,8 @@ void print_all_vechile(Vehicle car);
 void print_all_vechiles(Vehicle *cars, int cars_int);
 Vehicle * randomize_cars(Vehicle *cars,int m, int n, Road roads[]);
 
+int cmpfunc (const void * a, const void * b);
+void sort_lanes(Vehicle *cars, int cars_int);
 
 Vehicle set_car_acceleration(Vehicle car);
 Vehicle accelerate_car(Vehicle car, Road roads[]);

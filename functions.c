@@ -304,6 +304,24 @@ Vehicle * Create_allocate_cars(int n, Road roads[]) {
  return cars;
 }
 
+int cmpfunc (const void * a, const void * b) {
+   Vehicle l = *(const Vehicle *)a;
+   Vehicle r = *(const Vehicle *)b;
+   return l.lane - r.lane;
+}
+
+void sort_lanes(Vehicle *cars, int cars_int){
+  Vehicle *print_cars = malloc(sizeof(Vehicle) * cars_int);
+  for (int i = 0; i < cars_int; i++){
+    print_cars[i] = cars[i];
+  }
+  qsort(print_cars, cars_int, sizeof(Vehicle), cmpfunc);
+  for (int i = 0; i < cars_int; i++){
+    print_all_vechile(print_cars[i]);
+  }
+  free(print_cars);
+}
+
 Vehicle * Realloc_cars(Vehicle *ptr, int *cars_int, int new, Road roads[]) {
   Vehicle *cars = malloc(sizeof(Vehicle) * (*cars_int + new));
   for (int i = 0; i < *cars_int; i++) {
