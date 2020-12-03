@@ -145,6 +145,7 @@ char* color_to_string(Light_color color) {
     return "Dummy";
     break;
   default:
+  return "Not Defined";
     break;
   }
 }
@@ -162,6 +163,7 @@ char* lane_to_string(Lane_type type) {
     return "Bus";
     break;
   default:
+    return "Not Defined";
     break;
   }
 }
@@ -185,6 +187,7 @@ char* state_to_string(State state) {
       return "Mock";
       break;
   default:
+  return "Not Defined";
     break;
   }
 }
