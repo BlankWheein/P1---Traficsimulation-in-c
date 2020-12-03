@@ -67,6 +67,21 @@ Vehicle state_driving(Vehicle car, Vehicle *cars, int cars_int, Road roads[], Tr
   return car;
 }
 
+void prompt(double *thru_put, int *iter_speed){
+  do{
+    system("cls");
+    printf("What thru-put do u want per hour? ");
+    scanf(" %lf", &*thru_put);
+  }while(*thru_put < 0);
+
+  do{
+    system("cls");
+    printf("\nWhat iteration speed do u want? (1: real time, 50: fast, 9999999: fast as fuck boi) ");
+    scanf(" %d", &*iter_speed);
+  }while(*iter_speed < 0);
+
+}
+
 
 Vehicle drive(Vehicle car, Vehicle *cars, int cars_int, Road roads[], Traffic_light lights[], int lights_int) {
    if (car.state == Waiting) {

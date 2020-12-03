@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 #include <time.h>
 #include <windows.h>
 #include <math.h>
@@ -9,9 +10,12 @@
 
 int main(void) {
 
-
   srand(time(NULL));
-  double vehicles_per_hour = (709.0)/60.0*30.0/60.0;
+  double thru_put = 709.0;
+  int iter_speed = 0;
+  prompt(&thru_put, &iter_speed);
+
+  double vehicles_per_hour = thru_put/60.0*30.0/60.0;
   printf("%lf", vehicles_per_hour);
   
   int cars_int = 1;
@@ -49,7 +53,7 @@ int main(void) {
       }
       secs += 1;
 
-      if (secs % 1464 == 0) {
+      if (secs % iter_speed == 0) {
         system("cls");
         print_traffic_light(lights, lights_int);
         print_vehicles(cars, cars_int);
