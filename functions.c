@@ -1,6 +1,6 @@
 #include "functions.h"
 #include "structs.h"
-#define ROAD_COUNT 3
+#define ROAD_COUNT 2
 Vehicle set_car_acceleration(Vehicle car){
   car.acceleration = (2 * (1 - (car.time_driving/car.speed_limit_time)) * (car.speed_limit - 0)) / car.speed_limit_time;
   return car;
@@ -84,6 +84,9 @@ void prompt(double *thru_put, int *iter_speed){
 
 
 Vehicle drive(Vehicle car, Vehicle *cars, int cars_int, Road roads[], Traffic_light lights[], int lights_int) {
+  if (car.state == Done) {
+    return car;
+  }
    if (car.state == Waiting) {
 car = state_waiting(car, cars, cars_int, roads, lights, lights_int);
    } else if(car.state == Driving) {
