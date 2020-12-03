@@ -158,6 +158,9 @@ char* lane_to_string(Lane_type type) {
   case PlusBus:
     return "Plus Bus";
     break;
+  case Bus:
+    return "Bus";
+    break;
   default:
     break;
   }
@@ -228,20 +231,24 @@ Traffic_light nearest_traffic_light(Vehicle car, Traffic_light lights[], int lig
 Vehicle create_vehicle(int id, int dist, double speed_limit_, Road roads[]) {
     Lane_type type;
     double chance = rand_uniform(0, 100);
-    if (chance <= 33) {
+    if (chance <= 90) {
       type = Car;
-    } else if (chance <= 66) {
+    } else if (chance > 90 && chance < 95) {
       type = PlusBus;
     } else {
       type = Bus;
     } 
     
-
-
     int lane;
+    int waiting = 0;
     do {
     lane = rand() % ROAD_COUNT; 
-    } while (roads[lane].lane_type != type);
+    if (roads[lane].lane_type == type) {
+      waiting = 1;
+    } else if(roads[lane].lane_type == Car && type == Bus) {
+      waiting = 1;
+    }
+    } while (!waiting);
     
     double speed = 0;
     double breaks = 0;
@@ -352,5 +359,5 @@ void print_traffic_light(Traffic_light lights[], int a) {
       printf("Position:   %.0lf Color: %s Timer: %d/%d\n", lights[i].position, color_to_string(lights[i].color), lights[i].timer, lights[i].timer_green);
       }
     }
-  }  
+  }
 }

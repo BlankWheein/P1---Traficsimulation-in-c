@@ -16,9 +16,7 @@ int main(void) {
   
   int cars_int = 1;
   int lights_int = 2;
-  int lights_int = 3;
   Road roads[] = {create_road(50, Car, 670), create_road(50, Car, 670), create_road(20, PlusBus, 670)};
-  Traffic_light lights[] = {create_light(red, 1, 59, 60), create_light(red, 300, 1500, 100), create_light(red, 300, 60, 30)};
   Traffic_light lights[] = {create_light(red, 1, 25, 23), create_light(red, 300, 1500, 50)};
   Vehicle *cars = Create_allocate_cars(cars_int, roads);
   
@@ -51,7 +49,7 @@ int main(void) {
       }
       secs += 1;
 
-      if (secs % 1 == 0) {
+      if (secs % 1464 == 0) {
         system("cls");
         print_traffic_light(lights, lights_int);
         print_vehicles(cars, cars_int);

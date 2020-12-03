@@ -2,7 +2,7 @@
 #define STRUCTS
 
 typedef enum {green, red, dummy} Light_color;
-typedef enum {PlusBus, Car} Lane_type;
+typedef enum {PlusBus, Car, Bus} Lane_type;
 typedef enum {Waiting, Driving, Done, HoldingForRed, Mock} State;
 
 typedef struct  {
@@ -34,7 +34,7 @@ typedef struct {
 
 typedef struct {
   double speed_limit;
-  Lane_type lane_type; /* Type can be "Bus_lane" or "Car_lane" */
+  Lane_type lane_type; /* Type can be "PlusBuslane" or "Carlane*/
   double length; /* Length of road */
 } Road;
 #endif
