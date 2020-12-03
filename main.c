@@ -54,6 +54,7 @@ int main(void) {
         Sleep(1);
         system("cls");
         printf("%d out of %d\n", secs,duration);
+        pnt_avg_speed_bridge(cars, cars_int);
         print_traffic_light(lights, lights_int);
         sort_lanes(cars, cars_int);
       }
