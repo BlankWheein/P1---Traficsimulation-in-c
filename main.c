@@ -13,24 +13,25 @@ int main(void) {
   double thru_put = 709.0;
   int duration = 60*15;
   int iter_speed = 0;
-  prompt(&thru_put, &iter_speed);
+  int cars_sec = 0;
+  prompt(&thru_put, &iter_speed, &cars_sec);
 
-  double vehicles_per_hour = thru_put/60.0*30.0/60.0;
+  double vehicles_per_hour = ceil(thru_put/60.0/60.0*cars_sec);
   printf("%lf", vehicles_per_hour);
-  
+
   int cars_int = 1;
   int lights_int = 3;
   Road roads[] = {create_road(50, Car, 670), create_road(50, PlusBus, 670)};
   Traffic_light lights[] = {create_light(red, 1, 30, 30), create_light(red, 300, 3600, 1), create_light(red, 650, 31, 31)};
   Vehicle *cars = Create_allocate_cars(cars_int, roads);
-  
+
   int done = 0;
   int secs = 0;
   double vehicles = 0;
 
   while(!done) {
       done = 1;
-      if (secs % 30 == 0 && secs < duration && secs > 1) {
+      if (secs % cars_sec == 0 && secs < duration && secs > 1) {
         cars = Realloc_cars(cars, &cars_int, (int)ceil(vehicles_per_hour), roads);
       }
 
@@ -80,7 +81,7 @@ int main(void) {
   for (int i = 0; i < ROAD_COUNT; i++) {
     printf("%lf: %d\n", secs_on_bridge[i] / vehicles_per_lane[i], vehicles_per_lane[i]);
   }
-  
+
 
   return 0;
 }

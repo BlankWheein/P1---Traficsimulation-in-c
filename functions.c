@@ -67,7 +67,7 @@ Vehicle state_driving(Vehicle car, Vehicle *cars, int cars_int, Road roads[], Tr
   return car;
 }
 
-void prompt(double *thru_put, int *iter_speed){
+void prompt(double *thru_put, int *iter_speed, int *cars_sec){
   do{
     system("cls");
     printf("What thru-put do u want per hour? ");
@@ -79,6 +79,12 @@ void prompt(double *thru_put, int *iter_speed){
     printf("\nWhat iteration speed do u want? (1: slow, 50: fast, 9999999: fast as fuck boi) ");
     scanf(" %d", iter_speed);
   }while(*iter_speed < 0);
+
+  do{
+    system("cls");
+    printf("\n hvor lang tid før du spawner biler ");
+    scanf(" %d", cars_sec);
+  }while(*cars_sec < 0);
 
 }
 
@@ -155,7 +161,7 @@ void print_vehicles(Vehicle *cars, int cars_int) {
         lane = cars[i].lane;
       }
         print_vehicle(cars[i]);
-        
+
     }
 }
 
@@ -278,19 +284,19 @@ Vehicle create_vehicle(int id, int dist, double speed_limit_, Road roads[]) {
       type = PlusBus;
     } else {
       type = Bus;
-    } 
-    
+    }
+
     int lane;
     int waiting = 0;
     do {
-    lane = rand() % ROAD_COUNT; 
+    lane = rand() % ROAD_COUNT;
     if (roads[lane].lane_type == type) {
       waiting = 1;
     } else if(roads[lane].lane_type == Car && type == Bus) {
       waiting = 1;
     }
     } while (!waiting);
-    
+
     double speed = 0;
     double breaks = 0;
     double position = dist;
