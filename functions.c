@@ -1,6 +1,6 @@
 #include "functions.h"
 #include "structs.h"
-#define ROAD_COUNT 2
+#define ROAD_COUNT 3
 Vehicle set_car_acceleration(Vehicle car){
   car.acceleration = (2 * (1 - (car.time_driving/car.speed_limit_time)) * (car.speed_limit - 0)) / car.speed_limit_time;
   return car;
@@ -19,11 +19,13 @@ Vehicle accelerate_car(Vehicle car, Road roads[]){
 
 Vehicle state_waiting(Vehicle car, Vehicle *cars, int cars_int, Road roads[], Traffic_light lights[], int lights_int) {
   Vehicle closest = get_nearest_car(car, cars, cars_int, roads);
+  
   int is_safe = check_if_safe_distance(car, closest);
   if (is_safe == 1) {
    car.state = Driving;
    car = state_driving(car, cars, cars_int, roads, lights, lights_int);
  }
+
 return car;
 }
 
@@ -138,13 +140,13 @@ int check_if_safe_distance(Vehicle car, Vehicle car_in_front) {
 }
 void print_vehicle(Vehicle car) {
   if (car.state != Done) {
-    printf("Vehicle(%d:%s): Speed: %.3lf(%.1lf), position: %.2lf, secs_on_bridge: %d, speed_limit: %.1lf, acceleration: %.3lf, safe_distance: %.2lf, Lane: %d, State: %s\n", car.ID, lane_to_string(car.type),car.speed, ms_to_kmt(car.speed), car.position, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.acceleration, car.safe_distance, car.lane, state_to_string(car.state));
+    printf("Vehicle(%d:%s): Speed: %.3lf(%.1lf), position: %.2lf, secs_on_bridge: %d, speed_limit: %.1lf, acceleration: %.3lf, safe_distance: %.2lf, Lane: %d, State: %s, Time_waited: %d\n", car.ID, lane_to_string(car.type),car.speed, ms_to_kmt(car.speed), car.position, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.acceleration, car.safe_distance, car.lane, state_to_string(car.state), car.time_waited_for_green_light);
 
   }
     }
 
 void print_all_vechile(Vehicle car) {
-    printf("Vehicle(%d:%s): Lane: %d, secs_on_bridge: %d, speed_limit: %.1lf, avg_speed: %.3lf\n", car.ID,lane_to_string(car.type), car.lane, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.avg_speed);
+    printf("Vehicle(%d:%s): Lane: %d, secs_on_bridge: %d, speed_limit: %.1lf, avg_speed: %.3lf, Time waited on green light: %d\n", car.ID,lane_to_string(car.type), car.lane, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.avg_speed, car.time_waited_for_green_light);
 }
 
 void print_vehicles(Vehicle *cars, int cars_int) {
@@ -303,8 +305,9 @@ Vehicle create_vehicle(int id, int dist, double speed_limit_, Road roads[]) {
     int ID = id;
     int secs_on_bridge = 0;
     State state = Waiting;
+    int time_waited_for_green_light = 0;
 
-    Vehicle car = {speed, breaks, position, length, speed_limit, speed_limit_time, time_driving, acceleration, safe_distance, ID, lane, secs_on_bridge, state, type};
+    Vehicle car = {speed, breaks, position, length, speed_limit, speed_limit_time, time_driving, acceleration, safe_distance, ID, lane, secs_on_bridge, state, type, time_waited_for_green_light};
     return car;
 }
 
@@ -401,6 +404,7 @@ Vehicle check_light(Traffic_light light, Vehicle car, Vehicle closest) {
       car.speed = 0;
     }
     if (car.speed == 0 && car.position > 1) {
+      car.time_waited_for_green_light += 1; 
       car.state = HoldingForRed;
     }
 }
