@@ -21,8 +21,8 @@ int main(void) {
 
   int cars_int = 1;
   int lights_int = 3;
-  Road roads[] = {create_road(50, Car, 670), create_road(50, PlusBus, 670)};
-  Traffic_light lights[] = {create_light(red, 1, 30, 30), create_light(red, 300, 3600, 1), create_light(red, 650, 31, 31)};
+  Road roads[] = {create_road(50, Car, 670), create_road(50, Car, 670),create_road(50, PlusBus, 670)};
+  Traffic_light lights[] = {create_light(red, 1, 35, 30), create_light(red, 300, 3600, 1), create_light(red, 650, 25, 30)};
   Vehicle *cars = Create_allocate_cars(cars_int, roads);
 
   int done = 0;
@@ -52,7 +52,7 @@ int main(void) {
       secs += 1;
 
       if (secs % iter_speed == 0) {
-        Sleep(1);
+        Sleep(100);
         system("cls");
         printf("%d out of %d\n", secs,duration);
         pnt_avg_speed_bridge(cars, cars_int);
