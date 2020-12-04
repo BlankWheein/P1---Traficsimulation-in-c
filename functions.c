@@ -1,6 +1,6 @@
 #include "functions.h"
 #include "structs.h"
-#define ROAD_COUNT 3
+#define ROAD_COUNT 2
 Vehicle set_car_acceleration(Vehicle car){
   car.acceleration = (2 * (1 - (car.time_driving/car.speed_limit_time)) * (car.speed_limit - 0)) / car.speed_limit_time;
   return car;
@@ -358,6 +358,18 @@ int cmpfunc (const void * a, const void * b) {
      return l.ID - r.ID;
    }
    return l.lane - r.lane;
+}
+
+void save_to_file(Vehicle *cars, int cars_int, int secs, int duration) {
+  FILE * fp;
+   int i;
+   fp = fopen ("data.csv","w+");
+   fprintf(fp,"Duration of simulation, %d,Time stopped spawning cars, %d\n", secs, duration);
+   fprintf(fp, "ID, TYPE, LANE, SECS ON BRIDGE, AVG SPEED, TIME WATED FOR GREEN\n");
+   for(i = 0; i < cars_int; i++){
+       fprintf(fp, "%d,%s,%d,%d,%.3lf,%d\n", cars[i].ID,lane_to_string(cars[i].type), cars[i].lane, cars[i].secs_on_bridge, cars[i].avg_speed, cars[i].time_waited_for_green_light);
+   }
+  fclose (fp);
 }
 
 void sort_lanes(Vehicle *cars, int cars_int){

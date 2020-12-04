@@ -10,18 +10,18 @@
 
 int main(void) {
   srand(time(NULL));
-  double thru_put = 709.0;
-  int duration = 60*15;
-  int iter_speed = 0;
-  int cars_sec = 0;
-  prompt(&thru_put, &iter_speed, &cars_sec);
+  double thru_put = 1700.0;
+  int duration = 60*60;
+  int iter_speed = 9999;
+  int cars_sec = 30;
+  //prompt(&thru_put, &iter_speed, &cars_sec);
 
   double vehicles_per_hour = ceil(thru_put/60.0/60.0*cars_sec);
   printf("%lf", vehicles_per_hour);
 
   int cars_int = 1;
   int lights_int = 3;
-  Road roads[] = {create_road(50, Car, 670), create_road(50, Car, 670),create_road(50, PlusBus, 670)};
+  Road roads[] = {create_road(50, Car, 670), create_road(50, PlusBus, 670)};
   Traffic_light lights[] = {create_light(red, 1, 35, 30), create_light(red, 300, 3600, 1), create_light(red, 650, 25, 30)};
   Vehicle *cars = Create_allocate_cars(cars_int, roads);
 
@@ -76,11 +76,12 @@ int main(void) {
     secs_on_bridge[cars[i].lane] += cars[i].secs_on_bridge;
   }
       sort_lanes_done(cars, cars_int);
-  printf("%d out of %d\n", secs,duration);
+  printf("Duration of simulation %d,Time stopped spawning cars %d\n", secs, duration);
   printf("Avarage secs on bridge per lane\n");
   for (int i = 0; i < ROAD_COUNT; i++) {
     printf("%lf: %d\n", secs_on_bridge[i] / vehicles_per_lane[i], vehicles_per_lane[i]);
   }
+  save_to_file(cars, cars_int, secs, duration);
 
 
   return 0;
