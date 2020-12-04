@@ -30,6 +30,7 @@ typedef struct {
   Lane_type type;
   double avg_speed;
   double avg_speed_total;
+  int time_waited_for_green_light;
 } Vehicle;
 
 typedef struct {
