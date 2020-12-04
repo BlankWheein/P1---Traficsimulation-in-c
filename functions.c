@@ -272,9 +272,9 @@ Traffic_light nearest_traffic_light(Vehicle car, Traffic_light lights[], int lig
 Vehicle create_vehicle(int id, int dist, double speed_limit_, Road roads[]) {
     Lane_type type;
     double chance = rand_uniform(0, 100);
-    if (chance <= 90) {
+    if (chance <= 92.98) {
       type = Car;
-    } else if (chance > 90 && chance < 95) {
+    } else if (chance > 92.98 && chance < 94.18) {
       type = PlusBus;
     } else {
       type = Bus;
