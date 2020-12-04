@@ -16,6 +16,7 @@ void pnt_avg_speed_bridge(Vehicle *cars, int cars_int);
 void prompt(double *thru_put, int *iter_speed, int *cars_sec);
 int cmpfunc (const void * a, const void * b);
 void sort_lanes(Vehicle *cars, int cars_int);
+void save_to_file(Vehicle *cars, int cars_int, int secs, int duration);
 
 Vehicle set_car_acceleration(Vehicle car);
 Vehicle accelerate_car(Vehicle car, Road roads[]);
