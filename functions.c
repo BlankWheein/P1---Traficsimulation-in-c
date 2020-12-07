@@ -365,9 +365,9 @@ void save_to_file(Vehicle *cars, int cars_int, int secs, int duration) {
    int i;
    fp = fopen ("data.csv","w+");
    fprintf(fp,"Duration of simulation, %d,Time stopped spawning cars, %d\n", secs, duration);
-   fprintf(fp, "ID, TYPE, LANE, SECS ON BRIDGE, AVG SPEED, TIME WATED FOR GREEN\n");
+   fprintf(fp, "ID, TYPE, LANE, SECS ON BRIDGE, AVG SPEED, TIME WAITED FOR GREEN\n");
    for(i = 0; i < cars_int; i++){
-       fprintf(fp, "%d,%s,%d,%d,%.3lf,%d\n", cars[i].ID,lane_to_string(cars[i].type), cars[i].lane, cars[i].secs_on_bridge, cars[i].avg_speed, cars[i].time_waited_for_green_light);
+       fprintf(fp, "%d,%s,%d,%d,%.3lf,%d\n", cars[i].ID,lane_to_string(cars[i].type), cars[i].lane +1, cars[i].secs_on_bridge, cars[i].avg_speed, cars[i].time_waited_for_green_light);
    }
   fclose (fp);
 }
