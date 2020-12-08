@@ -13,10 +13,10 @@ void print_all_vechiles(Vehicle *cars, int cars_int);
 Vehicle * randomize_cars(Vehicle *cars,int m, int n, Road roads[], int road_int);
 
 void pnt_avg_speed_bridge(Vehicle *cars, int cars_int);
-void prompt(double *thru_put, int *iter_speed, int *cars_sec, int *road_int, int *car_lane_int);
+void prompt(double *thru_put, int *iter_speed, int *cars_sec, int *road_int, int *bus_lane_int, int *duration);
 int cmpfunc (const void * a, const void * b);
 void sort_lanes(Vehicle *cars, int cars_int);
-void save_to_file(Vehicle *cars, int cars_int, int secs, int duration);
+void save_to_file(Vehicle *cars, int cars_int, int secs, int duration, int total);
 
 Vehicle set_car_acceleration(Vehicle car);
 Vehicle accelerate_car(Vehicle car, Road roads[], int road_int);

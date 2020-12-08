@@ -68,36 +68,42 @@ Vehicle state_driving(Vehicle car, Vehicle *cars, int cars_int, Road roads[], Tr
   return car;
 }
 
-void prompt(double *thru_put, int *iter_speed, int *cars_sec, int *road_int, int *car_lane_int){
+void prompt(double *thru_put, int *iter_speed, int *cars_sec, int *road_int, int *bus_lane_int, int *duration){
   do{
     system("cls");
-    printf("What thru-put do u want per hour? ");
+    printf("\nWhat throughput do you want per hour? ");
     scanf(" %lf", thru_put);
   }while(*thru_put < 0);
 
   do{
     system("cls");
-    printf("\nWhat iteration speed do u want? (1: slow, 50: fast, 9999999: fast as fuck boi) ");
+    printf("\nWhat iteration speed do u want? (1: slow, 50: fast, 9999999: Really fast) ");
     scanf(" %d", iter_speed);
   }while(*iter_speed < 0);
 
   do{
     system("cls");
-    printf("\n hvor lang tid før du spawner biler ");
+    printf("\nWhat interval between spawning cars? ");
     scanf(" %d", cars_sec);
   }while(*cars_sec < 0);
 
   do{
     system("cls");
-    printf("\n how many lanes ");
+    printf("\nHow many lanes in total? ");
     scanf(" %d", road_int);
-  }while(*road_int < 2);
+  }while(*road_int < 1);
 
   do{
     system("cls");
-    printf("\n how many lanes should be car lanes? (rest will be plusbus lanes) ");
-    scanf(" %d", car_lane_int);
-  }while(*car_lane_int < 0);
+    printf("\nHow many lanes should be PlusBus lanes? (Rest will be Car lanes) ");
+    scanf(" %d", bus_lane_int);
+  }while(*bus_lane_int < 0);
+  
+  do{
+    system("cls");
+    printf("\nHow many minutes do you want the simulation to run for? ");
+    scanf(" %d", duration);
+  }while(*duration < 0);
 
 }
 
@@ -163,7 +169,7 @@ void print_vehicle(Vehicle car) {
     }
 
 void print_all_vechile(Vehicle car) {
-    printf("Vehicle(%d:%s): Lane: %d, secs_on_bridge: %d, speed_limit: %.1lf, avg_speed: %.3lf, Time waited on green light: %d\n", car.ID,lane_to_string(car.type), car.lane, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.avg_speed, car.time_waited_for_green_light);
+    printf("Vehicle(%5d:%s): Lane: %2d, secs_on_bridge: %3d, speed_limit: %4.1lf, avg_speed: %3.2lf, Time waited on green light: %3d\n", car.ID,lane_to_string(car.type), car.lane, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.avg_speed, car.time_waited_for_green_light);
 }
 
 void print_vehicles(Vehicle *cars, int cars_int) {
@@ -298,6 +304,24 @@ Vehicle create_vehicle(int id, int dist, double speed_limit_, Road roads[], int 
     } else {
       type = Bus;
     }
+    int canbeplusbus = 0;
+    for (int i = 0; i < road_int; i++) {
+      if (roads[i].lane_type == PlusBus) {
+        canbeplusbus = 1;
+      }
+    }
+
+    if (canbeplusbus == 0) {
+chance = rand_uniform(0, 94.18);
+    if (chance <= 92.98) {
+      type = Car;
+    } else if (chance > 92.98 && chance < 94.18) {
+      type = Bus;
+
+
+    }
+    }
+    
 
     int lane;
     int waiting = 0;
@@ -313,8 +337,14 @@ Vehicle create_vehicle(int id, int dist, double speed_limit_, Road roads[], int 
     double speed = 0;
     double breaks = 0;
     double position = dist;
+    double speed_limit;
     double length = 0;
-    double speed_limit = kmt_to_ms(speed_limit_);
+    if (type == Car) {
+      speed_limit = kmt_to_ms(speed_limit_);
+    } else {
+      speed_limit = kmt_to_ms(speed_limit_ / 2);
+    }
+    
     double speed_limit_time = 65.5;
     double time_driving = 0;
     double acceleration = 0;
@@ -371,11 +401,11 @@ int cmpfunc (const void * a, const void * b) {
    return l.lane - r.lane;
 }
 
-void save_to_file(Vehicle *cars, int cars_int, int secs, int duration) {
+void save_to_file(Vehicle *cars, int cars_int, int secs, int duration, int total) {
   FILE * fp;
    int i;
    fp = fopen ("data.csv","w+");
-   fprintf(fp,"Duration of simulation, %d,Time stopped spawning cars, %d\n", secs, duration);
+   fprintf(fp,"Duration of simulation, %d,Time stopped spawning cars, %d, Total number of cars:,%d\n", secs, duration, total);
    fprintf(fp, "ID, TYPE, LANE, SECS ON BRIDGE, AVG SPEED, TIME WAITED FOR GREEN\n");
    for(i = 0; i < cars_int; i++){
        fprintf(fp, "%d,%s,%d,%d,%.3lf,%d\n", cars[i].ID,lane_to_string(cars[i].type), cars[i].lane +1, cars[i].secs_on_bridge, cars[i].avg_speed, cars[i].time_waited_for_green_light);
