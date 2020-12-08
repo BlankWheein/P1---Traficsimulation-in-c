@@ -14,17 +14,23 @@ int main(void) {
   int duration = 60*60;
   int iter_speed = 9999;
   int cars_sec = 30;
-  int road_int, car_lane_int;
+  int road_int  = 0, car_lane_int = 0;
   prompt(&thru_put, &iter_speed, &cars_sec, &road_int, &car_lane_int);
+  Road roads[road_int];
+  for (int i = 0; i < car_lane_int; i++) {
+    roads[i] = create_road(50, Car, 670);
+  }
+  for (int j = car_lane_int; j < road_int; j++) {
+    roads[j] = create_road(50, PlusBus, 670);
+  }
 
   double vehicles_per_hour = ceil(thru_put/60.0/60.0*cars_sec);
   printf("%lf", vehicles_per_hour);
 
   int cars_int = 1;
   int lights_int = 3;
-  Road roads[] = {create_road(50, Car, 670), create_road(50, PlusBus, 670)};
   Traffic_light lights[] = {create_light(red, 1, 35, 30), create_light(red, 300, 3600, 1), create_light(red, 650, 25, 30)};
-  Vehicle *cars = Create_allocate_cars(cars_int, roads);
+  Vehicle *cars = Create_allocate_cars(cars_int, roads, road_int);
 
   int done = 0;
   int secs = 0;
@@ -33,11 +39,11 @@ int main(void) {
   while(!done) {
       done = 1;
       if (secs % cars_sec == 0 && secs < duration && secs > 1) {
-        cars = Realloc_cars(cars, &cars_int, (int)ceil(vehicles_per_hour), roads);
+        cars = Realloc_cars(cars, &cars_int, (int)ceil(vehicles_per_hour), roads, road_int);
       }
 
       for(int i = 0; i < cars_int; i++) {
-          cars[i] = drive(cars[i], cars, cars_int, roads, lights, lights_int);
+          cars[i] = drive(cars[i], cars, cars_int, roads, lights, lights_int, road_int);
           if (cars[i].state != Done) {
             done = 0;
           }
@@ -58,9 +64,9 @@ int main(void) {
         printf("%d out of %d\n", secs,duration);
         pnt_avg_speed_bridge(cars, cars_int);
          printf("Avarage secs on bridge per lane\n");
-           int vehicles_per_lane[ROAD_COUNT];
-  double secs_on_bridge[ROAD_COUNT];
-  for (int i = 0; i < ROAD_COUNT; i++) {
+           int vehicles_per_lane[road_int];
+  double secs_on_bridge[road_int];
+  for (int i = 0; i < road_int; i++) {
     secs_on_bridge[i] = 0;
     vehicles_per_lane[i] = 0;
   }
@@ -69,7 +75,7 @@ int main(void) {
     vehicles_per_lane[cars[i].lane] += 1;
     secs_on_bridge[cars[i].lane] += cars[i].secs_on_bridge;
   }
-  for (int i = 0; i < ROAD_COUNT; i++) {
+  for (int i = 0; i < road_int; i++) {
     printf("%lf: %d\n", secs_on_bridge[i] / vehicles_per_lane[i], vehicles_per_lane[i]);
   }
         //print_traffic_light(lights, lights_int);
@@ -79,9 +85,9 @@ int main(void) {
   }
   system("cls");
 
-  int vehicles_per_lane[ROAD_COUNT];
-  double secs_on_bridge[ROAD_COUNT];
-  for (int i = 0; i < ROAD_COUNT; i++) {
+  int vehicles_per_lane[road_int];
+  double secs_on_bridge[road_int];
+  for (int i = 0; i < road_int; i++) {
     secs_on_bridge[i] = 0;
     vehicles_per_lane[i] = 0;
   }
@@ -94,7 +100,7 @@ int main(void) {
       sort_lanes_done(cars, cars_int);
   printf("Duration of simulation %d,Time stopped spawning cars %d\n", secs, duration);
   printf("Avarage secs on bridge per lane\n");
-  for (int i = 0; i < ROAD_COUNT; i++) {
+  for (int i = 0; i < road_int; i++) {
     printf("%lf: %d\n", secs_on_bridge[i] / vehicles_per_lane[i], vehicles_per_lane[i]);
   }
   save_to_file(cars, cars_int, secs, duration);
