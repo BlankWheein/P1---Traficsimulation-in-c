@@ -14,7 +14,8 @@ int main(void) {
   int duration = 60*60;
   int iter_speed = 9999;
   int cars_sec = 30;
-  prompt(&thru_put, &iter_speed, &cars_sec);
+  int road_int, car_lane_int;
+  prompt(&thru_put, &iter_speed, &cars_sec, &road_int, &car_lane_int);
 
   double vehicles_per_hour = ceil(thru_put/60.0/60.0*cars_sec);
   printf("%lf", vehicles_per_hour);

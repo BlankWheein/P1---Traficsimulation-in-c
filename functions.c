@@ -69,7 +69,7 @@ Vehicle state_driving(Vehicle car, Vehicle *cars, int cars_int, Road roads[], Tr
   return car;
 }
 
-void prompt(double *thru_put, int *iter_speed, int *cars_sec){
+void prompt(double *thru_put, int *iter_speed, int *cars_sec, int *road_int, int *car_lane_int){
   do{
     system("cls");
     printf("What thru-put do u want per hour? ");
@@ -87,6 +87,18 @@ void prompt(double *thru_put, int *iter_speed, int *cars_sec){
     printf("\n hvor lang tid før du spawner biler ");
     scanf(" %d", cars_sec);
   }while(*cars_sec < 0);
+
+  do{
+    system("cls");
+    printf("\n how many lanes ");
+    scanf(" %d", road_int);
+  }while(*road_int < 2);
+
+  do{
+    system("cls");
+    printf("\n how many lanes should be car lanes? (rest will be plusbus lanes) ");
+    scanf(" %d", car_lane_int);
+  }while(*car_lane_int < 0);
 
 }
 
