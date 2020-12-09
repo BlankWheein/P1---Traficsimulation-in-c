@@ -1,20 +1,8 @@
 #include "functions.h"
 #include "structs.h"
-Vehicle set_car_acceleration(Vehicle car){
-  car.acceleration = (2 * (1 - (car.time_driving/car.speed_limit_time)) * (car.speed_limit - 0)) / car.speed_limit_time;
-  return car;
-}
 
-Vehicle accelerate_car(Vehicle car, Road roads[], int road_int){
-  car.speed += car.acceleration;
-  if (car.speed > car.speed_limit) {
-    car.speed = car.speed_limit;
-  }
-  if (car.speed > roads[car.lane].speed_limit) {
-    car.speed = roads[car.lane].speed_limit;
-  }
-  return car;
-}
+
+
 
 Vehicle state_waiting(Vehicle car, Vehicle *cars, int cars_int, Road roads[], Traffic_light lights[], int lights_int, int road_int) {
   Vehicle closest = get_nearest_car(car, cars, cars_int, roads, road_int);
@@ -117,25 +105,6 @@ void pnt_avg_speed_bridge(Vehicle *cars, int cars_int){
   printf("AVERAGE SPEED: %.2lfkm/t\n", avg_speed);
 }
 
-Vehicle drive(Vehicle car, Vehicle *cars, int cars_int, Road roads[], Traffic_light lights[], int lights_int, int road_int) {
-  if (car.state == Done) {
-    return car;
-  }
-   if (car.state == Waiting) {
-car = state_waiting(car, cars, cars_int, roads, lights, lights_int, road_int);
-   } else if(car.state == Driving) {
-     car = state_driving(car, cars, cars_int, roads, lights, lights_int, road_int);
-   } else if(car.state == HoldingForRed) {
-     car = state_driving(car, cars, cars_int, roads, lights, lights_int, road_int);
-   }
-
-if (car.position > 0 && car.position < roads[0].length) {
-  car.avg_speed_total += car.speed;
-}
-
-return car;
-}
-
 double ms_to_kmt(double x){
   return x * 3.6;
 }
@@ -144,10 +113,7 @@ double ms_to_kmt(double x){
 double kmt_to_ms(double x){
   return x / 3.6;
 }
-Vehicle set_safe_distance(Vehicle car) {
-    car.safe_distance = (ms_to_kmt(car.speed) / 2) + 1;
-    return car;
-}
+
 
 int check_if_safe_distance(Vehicle car, Vehicle car_in_front) {
     if (car_in_front.state == Mock) {
@@ -293,93 +259,6 @@ Traffic_light nearest_traffic_light(Vehicle car, Traffic_light lights[], int lig
   return nearest_light;
 }
 
-Vehicle create_vehicle(int id, int dist, double speed_limit_, Road roads[], int road_int) {
-    Lane_type type;
-    double chance = rand_uniform(0, 100);
-    if (chance <= 92.98) {
-      type = Car;
-    } else if (chance > 92.98 && chance < 93.68) {
-      type = PlusBus;
-    } else {
-      type = Bus;
-    }
-    int canbeplusbus = 0;
-    for (int i = 0; i < road_int; i++) {
-      if (roads[i].lane_type == PlusBus) {
-        canbeplusbus = 1;
-      }
-    }
-
-    if (canbeplusbus == 0 && type == PlusBus) {
-      type = Bus;
-    }
-    
-    int lane;
-    int waiting = 0;
-    do {
-    lane = rand() % road_int;
-    if (roads[lane].lane_type == type) {
-      waiting = 1;
-    } else if(roads[lane].lane_type == Car && type == Bus) {
-      waiting = 1;
-    }
-    } while (!waiting);
-
-    double speed = 0;
-    double position = dist;
-    double speed_limit;
-    if (type == Car) {
-      speed_limit = kmt_to_ms(speed_limit_);
-    } else {
-      speed_limit = kmt_to_ms(speed_limit_ / 2);
-    }
-    
-    double speed_limit_time = 65.5;
-    double time_driving = 0;
-    double acceleration = 0;
-    double safe_distance = 1;
-    int ID = id;
-    int secs_on_bridge = 0;
-    State state = Waiting;
-    int time_waited_for_green_light = 0;
-
-    Vehicle car = {speed, position, speed_limit, speed_limit_time, time_driving, acceleration, safe_distance, ID, lane, secs_on_bridge, state, type, time_waited_for_green_light};
-    return car;
-}
-
-Vehicle get_nearest_car(Vehicle car, Vehicle *cars, int cars_int, Road roads[], int road_int) {
-    Vehicle closest = create_vehicle(-1, 99999999, 160, roads, road_int);
-    if (cars_int < 1) {
-        return closest;
-    }
-    for (int i = 0; i < cars_int; i++) {
-        if (car.position < cars[i].position && cars[i].position < closest.position && car.lane == cars[i].lane) {
-            closest = cars[i];
-        }
-    }
-    return closest;
-}
-
-Vehicle create_random_vehicle(int id, Road roads[], int road_int) {
-  double speed_limit = rand_uniform(170, 250);
-  Vehicle car = create_vehicle(id, 0, speed_limit, roads, road_int);
-  return car;
-}
-
-Vehicle * randomize_cars(Vehicle *cars,int m, int n, Road roads[], int road_int) {
-  int id = m;
-  for (int i = m; i < n; i++) {
-    id += 1;
-    cars[i] = create_random_vehicle(id, roads, road_int);
-  }
-  return cars;
-}
-
-Vehicle * Create_allocate_cars(int n, Road roads[], int road_int) {
- Vehicle *cars = malloc(sizeof(Vehicle) * n);
- cars = randomize_cars(cars, 0, n, roads, road_int);
- return cars;
-}
 
 int cmpfunc (const void * a, const void * b) {
    Vehicle l = *(const Vehicle *)a;
@@ -422,42 +301,9 @@ void sort_lanes_done(Vehicle *cars, int cars_int){
   free(print_cars);
 }
 
-Vehicle * Realloc_cars(Vehicle *ptr, int *cars_int, int new, Road roads[], int road_int) {
-  Vehicle *cars = malloc(sizeof(Vehicle) * (*cars_int + new));
-  for (int i = 0; i < *cars_int; i++) {
-    cars[i] = ptr[i];
-  }
-  free(ptr);
-  int id = *cars_int;
-  for (int i = *cars_int; i < *cars_int + new; i++) {
-    id += 1;
-    cars[i] = create_random_vehicle(id, roads, road_int);
-  }
-  *cars_int += new;
-  return cars;
-}
 
-Vehicle check_light(Traffic_light light, Vehicle car, Vehicle closest) {
-  if (light.color == red) {
-    if (light.position - car.position < 30) {
-      car.speed = 5;
-      if (closest.position - car.position < 10) {
-        car.speed = closest.position - car.position - 1;
-        if (car.speed < 0) {
-          car.speed = 0;
-        }
-      }
-    }
-    if (light.position - car.position < 10) {
-      car.speed = 0;
-    }
-    if (car.speed == 0 && car.position > 1) {
-      car.time_waited_for_green_light += 1; 
-      car.state = HoldingForRed;
-    }
-}
-  return car;
-}
+
+
 
 double rand_uniform(double min, double max){
   return (max - min) * ( (double)rand() / (double)RAND_MAX ) + min;

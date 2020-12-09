@@ -6,7 +6,9 @@
 #include <math.h>
 
 #include "structs.h"
+#include "vehicles.h"
 #include "functions.c"
+
 
 int main(void) {
   srand(time(NULL));
