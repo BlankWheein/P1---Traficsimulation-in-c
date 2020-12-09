@@ -180,7 +180,6 @@ void print_vehicles(Vehicle *cars, int cars_int) {
         lane = cars[i].lane;
       }
         print_vehicle(cars[i]);
-
     }
 }
 
@@ -299,7 +298,7 @@ Vehicle create_vehicle(int id, int dist, double speed_limit_, Road roads[], int 
     double chance = rand_uniform(0, 100);
     if (chance <= 92.98) {
       type = Car;
-    } else if (chance > 92.98 && chance < 94.18) {
+    } else if (chance > 92.98 && chance < 93.68) {
       type = PlusBus;
     } else {
       type = Bus;
@@ -327,10 +326,8 @@ Vehicle create_vehicle(int id, int dist, double speed_limit_, Road roads[], int 
     } while (!waiting);
 
     double speed = 0;
-    double breaks = 0;
     double position = dist;
     double speed_limit;
-    double length = 0;
     if (type == Car) {
       speed_limit = kmt_to_ms(speed_limit_);
     } else {
@@ -346,7 +343,7 @@ Vehicle create_vehicle(int id, int dist, double speed_limit_, Road roads[], int 
     State state = Waiting;
     int time_waited_for_green_light = 0;
 
-    Vehicle car = {speed, breaks, position, length, speed_limit, speed_limit_time, time_driving, acceleration, safe_distance, ID, lane, secs_on_bridge, state, type, time_waited_for_green_light};
+    Vehicle car = {speed, position, speed_limit, speed_limit_time, time_driving, acceleration, safe_distance, ID, lane, secs_on_bridge, state, type, time_waited_for_green_light};
     return car;
 }
 
