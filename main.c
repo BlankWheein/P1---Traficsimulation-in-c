@@ -56,23 +56,23 @@ int main(void) {
         system("cls");
         printf("%d out of %d\n", secs,duration);
         pnt_avg_speed_bridge(cars, cars_int);
-         printf("Avarage secs on bridge per lane\n");
-           int vehicles_per_lane[ROAD_COUNT];
-  double secs_on_bridge[ROAD_COUNT];
-  for (int i = 0; i < ROAD_COUNT; i++) {
-    secs_on_bridge[i] = 0;
-    vehicles_per_lane[i] = 0;
-  }
-    for (int i = 0; i < cars_int; i++) {
-    cars[i].avg_speed = ms_to_kmt(cars[i].avg_speed_total / cars[i].secs_on_bridge);
-    vehicles_per_lane[cars[i].lane] += 1;
-    secs_on_bridge[cars[i].lane] += cars[i].secs_on_bridge;
-  }
-  for (int i = 0; i < ROAD_COUNT; i++) {
-    printf("%lf: %d\n", secs_on_bridge[i] / vehicles_per_lane[i], vehicles_per_lane[i]);
-  }
-        //print_traffic_light(lights, lights_int);
-        //sort_lanes(cars, cars_int);
+        printf("Average secs on bridge per lane\n");
+        int vehicles_per_lane[ROAD_COUNT];
+        double secs_on_bridge[ROAD_COUNT];
+        for (int i = 0; i < ROAD_COUNT; i++) {
+          secs_on_bridge[i] = 0;
+          vehicles_per_lane[i] = 0;
+        }
+        for (int i = 0; i < cars_int; i++) {
+          cars[i].avg_speed = ms_to_kmt(cars[i].avg_speed_total / cars[i].secs_on_bridge);
+          vehicles_per_lane[cars[i].lane] += 1;
+          secs_on_bridge[cars[i].lane] += cars[i].secs_on_bridge;
+        }
+        for (int i = 0; i < ROAD_COUNT; i++) {
+          printf("%lf: %d\n", secs_on_bridge[i] / vehicles_per_lane[i], vehicles_per_lane[i]);
+        }
+              //print_traffic_light(lights, lights_int);
+              //sort_lanes(cars, cars_int);
       }
 
   }

@@ -35,8 +35,6 @@ Vehicle state_driving(Vehicle car, Vehicle *cars, int cars_int, Road roads[], Tr
   car = set_safe_distance(car);
   Traffic_light light = nearest_traffic_light(car, lights, lights_int);
 
-
-
   int is_safe = check_if_safe_distance(car, closest);
 
   if (is_safe == 1) {
@@ -51,9 +49,9 @@ Vehicle state_driving(Vehicle car, Vehicle *cars, int cars_int, Road roads[], Tr
     if (closest.state == Mock) {
       return car;
     }
-      if (car.speed > closest.position - car.position) {
-        car.speed = closest.speed;
-      }
+    if (car.speed > closest.position - car.position) {
+      car.speed = closest.speed;
+    }
 
        // Needs a check if car will end up in other car, if so deaccelerate
   }
@@ -105,7 +103,7 @@ Vehicle drive(Vehicle car, Vehicle *cars, int cars_int, Road roads[], Traffic_li
     return car;
   }
    if (car.state == Waiting) {
-car = state_waiting(car, cars, cars_int, roads, lights, lights_int);
+     car = state_waiting(car, cars, cars_int, roads, lights, lights_int);
    } else if(car.state == Driving) {
      car = state_driving(car, cars, cars_int, roads, lights, lights_int);
    } else if(car.state == HoldingForRed) {
