@@ -31,7 +31,7 @@ int main(void) {
 
   int cars_int = 1;
   int lights_int = 3;
-  Traffic_light lights[] = {create_light(red, 1, 35, 30), create_light(red, 300, 3600, 1), create_light(red, 650, 25, 30)};
+  Traffic_light lights[] = {create_light(red, 1, 35, 30), create_light(red, 300, 5400, 600), create_light(red, 650, 25, 30)};
   Vehicle *cars = Create_allocate_cars(cars_int, roads, road_int);
 
   int done = 0;
@@ -61,12 +61,13 @@ int main(void) {
       secs += 1;
 
       if (secs % iter_speed == 0) {
-        Sleep(100);
+        
         system("cls");
         printf("%d out of %d\n", secs,duration);
         pnt_avg_speed_bridge(cars, cars_int);
-         printf("Avarage secs on bridge per lane\n");
+        printf("Avarage secs on bridge per lane\n");
            int vehicles_per_lane[road_int];
+        
   double secs_on_bridge[road_int];
   for (int i = 0; i < road_int; i++) {
     secs_on_bridge[i] = 0;
@@ -80,9 +81,10 @@ int main(void) {
   for (int i = 0; i < road_int; i++) {
     printf("%lf: %d\n", secs_on_bridge[i] / vehicles_per_lane[i], vehicles_per_lane[i]);
   }
-        //print_traffic_light(lights, lights_int);
-        //sort_lanes(cars, cars_int);
+        print_traffic_light(lights, lights_int);
+        sort_lanes(cars, cars_int);
       }
+      Sleep(10);
 
   }
   system("cls");

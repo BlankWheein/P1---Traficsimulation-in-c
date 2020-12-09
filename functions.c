@@ -311,18 +311,10 @@ Vehicle create_vehicle(int id, int dist, double speed_limit_, Road roads[], int 
       }
     }
 
-    if (canbeplusbus == 0) {
-chance = rand_uniform(0, 94.18);
-    if (chance <= 92.98) {
-      type = Car;
-    } else if (chance > 92.98 && chance < 94.18) {
+    if (canbeplusbus == 0 && type == PlusBus) {
       type = Bus;
-
-
-    }
     }
     
-
     int lane;
     int waiting = 0;
     do {
