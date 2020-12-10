@@ -250,3 +250,132 @@ Vehicle check_light(Traffic_light light, Vehicle car, Vehicle closest) {
 }
   return car;
 }
+
+/**
+ * @brief  Takes a car and Drives it forward if possible (This is used if it is on the bridge)
+ * @param  car: The car to drive
+ * @param  *cars: The Vehicle array
+ * @param  cars_int: The amount of Vehicles in the Vehicle array
+ * @param  roads[]: The Road Array
+ * @param  lights[]: The Traffic light array
+ * @param  lights_int: Amount of traffic lights in the Traffic light array
+ * @param  road_int: Amount of Roads in the Road array
+ * @retval Returns the updated car
+ */
+Vehicle state_driving(Vehicle car, Vehicle *cars, int cars_int, Road roads[], Traffic_light lights[], int lights_int, int road_int) {
+  car = set_car_acceleration(car);
+  Vehicle closest = get_nearest_car(car, cars, cars_int, roads, road_int);
+  car = set_safe_distance(car);
+  Traffic_light light = nearest_traffic_light(car, lights, lights_int);
+
+  int is_safe = check_if_safe_distance(car, closest);
+
+  if (is_safe == 1) {
+      car = accelerate_car(car, roads, road_int);
+      if (car.state == HoldingForRed) {
+        car.state = Driving;
+      }
+  }
+
+  if (is_safe == 0) {
+
+    if (closest.state == Mock) {
+      return car;
+    }
+      if (car.speed > closest.position - car.position) {
+        car.speed = closest.speed;
+      }
+
+       // Needs a check if car will end up in other car, if so deaccelerate
+  }
+
+  
+
+  car = check_light(light, car, closest);
+  car.position += car.speed;
+  if (car.position > 0) {
+      car.secs_on_bridge += 1;
+  }
+  if (car.position > roads[car.lane].length) {
+      car.state = Done;
+  }
+  return car;
+}
+
+/**
+ * @brief  Takes a car and Drives it forward if possible (This is used if it is waiting to enter the bridge)
+ * @param  car: The car to drive
+ * @param  *cars: The Vehicle array
+ * @param  cars_int: The amount of Vehicles in the Vehicle array
+ * @param  roads[]: The Road Array
+ * @param  lights[]: The Traffic light array
+ * @param  lights_int: Amount of traffic lights in the Traffic light array
+ * @param  road_int: Amount of Roads in the Road array
+ * @retval Returns the updated car
+ */
+Vehicle state_waiting(Vehicle car, Vehicle *cars, int cars_int, Road roads[], Traffic_light lights[], int lights_int, int road_int) {
+  Vehicle closest = get_nearest_car(car, cars, cars_int, roads, road_int);
+  
+  int is_safe = check_if_safe_distance(car, closest);
+  if (is_safe == 1) {
+   car.state = Driving;
+   car = state_driving(car, cars, cars_int, roads, lights, lights_int, road_int);
+ }
+
+return car;
+}
+
+/**
+ * @brief  Prints all the vehicles in the array with less data
+ * @param  *cars: The array of vehicles
+ * @param  cars_int: The amount of vehicles in the cars array
+ * @retval None
+ */
+void print_all_vechiles(Vehicle *cars, int cars_int) {
+int lane = 0;
+    for (int i = 0; i < cars_int; i++) {
+      if (cars[i].lane > lane) {
+        printf("\n\n");
+        lane = cars[i].lane;
+      }
+        print_all_vechile(cars[i]);
+    }
+}
+
+/**
+ * @brief  Prints all the vehicles in the array with more data
+ * @param  *cars: The array of vehicles
+ * @param  cars_int: The amount of vehicles in the cars array
+ * @retval None
+ */
+void print_vehicles(Vehicle *cars, int cars_int) {
+    int lane = 0;
+    for (int i = 0; i < cars_int; i++) {
+      if (cars[i].lane > lane) {
+        printf("\n\n");
+        lane = cars[i].lane;
+      }
+        print_vehicle(cars[i]);
+    }
+}
+
+/**
+ * @brief  Prints the car to the console with more data
+ * @param  car: The car to print
+ * @retval None
+ */
+void print_vehicle(Vehicle car) {
+  if (car.state != Done) {
+    printf("Vehicle(%d:%s): Speed: %.3lf(%.1lf), position: %.2lf, secs_on_bridge: %d, speed_limit: %.1lf, acceleration: %.3lf, safe_distance: %.2lf, Lane: %d, State: %s, Time_waited: %d\n", car.ID, lane_to_string(car.type),car.speed, ms_to_kmt(car.speed), car.position, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.acceleration, car.safe_distance, car.lane, state_to_string(car.state), car.time_waited_for_green_light);
+
+  }
+    }
+
+/**
+ * @brief  Prints the car to the console with less data
+ * @param  car: The car to print
+ * @retval None
+ */
+void print_all_vechile(Vehicle car) {
+    printf("Vehicle(%5d:%s): Lane: %2d, secs_on_bridge: %3d, speed_limit: %4.1lf, avg_speed: %3.2lf, Time waited on green light: %3d\n", car.ID,lane_to_string(car.type), car.lane, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.avg_speed, car.time_waited_for_green_light);
+}

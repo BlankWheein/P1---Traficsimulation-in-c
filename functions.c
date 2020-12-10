@@ -2,60 +2,16 @@
 #include "structs.h"
 
 
-
-
-Vehicle state_waiting(Vehicle car, Vehicle *cars, int cars_int, Road roads[], Traffic_light lights[], int lights_int, int road_int) {
-  Vehicle closest = get_nearest_car(car, cars, cars_int, roads, road_int);
-  
-  int is_safe = check_if_safe_distance(car, closest);
-  if (is_safe == 1) {
-   car.state = Driving;
-   car = state_driving(car, cars, cars_int, roads, lights, lights_int, road_int);
- }
-
-return car;
-}
-
-Vehicle state_driving(Vehicle car, Vehicle *cars, int cars_int, Road roads[], Traffic_light lights[], int lights_int, int road_int) {
-  car = set_car_acceleration(car);
-  Vehicle closest = get_nearest_car(car, cars, cars_int, roads, road_int);
-  car = set_safe_distance(car);
-  Traffic_light light = nearest_traffic_light(car, lights, lights_int);
-
-
-
-  int is_safe = check_if_safe_distance(car, closest);
-
-  if (is_safe == 1) {
-      car = accelerate_car(car, roads, road_int);
-      if (car.state == HoldingForRed) {
-        car.state = Driving;
-      }
-  }
-
-  if (is_safe == 0) {
-
-    if (closest.state == Mock) {
-      return car;
-    }
-      if (car.speed > closest.position - car.position) {
-        car.speed = closest.speed;
-      }
-
-       // Needs a check if car will end up in other car, if so deaccelerate
-  }
-
-  car = check_light(light, car, closest);
-  car.position += car.speed;
-  if (car.position > 0) {
-      car.secs_on_bridge += 1;
-  }
-  if (car.position > roads[car.lane].length) {
-      car.state = Done;
-  }
-  return car;
-}
-
+/**
+ * @brief  Sets config values for the program
+ * @param  *thru_put: The throughput of the program
+ * @param  *iter_speed: The iteration speed of the program
+ * @param  *cars_sec: The amount of time between spawning cars
+ * @param  *road_int: The amount of roads
+ * @param  *bus_lane_int: The amount of plusbus lanes
+ * @param  *duration: The amount of minutes the program runs for
+ * @retval None
+ */
 void prompt(double *thru_put, int *iter_speed, int *cars_sec, int *road_int, int *bus_lane_int, int *duration){
   do{
     system("cls");
@@ -95,26 +51,51 @@ void prompt(double *thru_put, int *iter_speed, int *cars_sec, int *road_int, int
 
 }
 
+/**
+ * @brief  Prints the avarage speed of all Vehicles on the bridge
+ * @param  *cars: The array of cars
+ * @param  cars_int: The amount of cars in the cars array
+ * @retval None
+ */
 void pnt_avg_speed_bridge(Vehicle *cars, int cars_int){
   double collected_speed = 0.0, avg_speed = 0.0;
+  int vehicles = 0;
   for (int i = 0; i < cars_int; i++){
-    collected_speed += cars[i].speed;
+    if (cars[i].state != Done) {
+       collected_speed += cars[i].speed;
+       vehicles += 1;
+    }
+    
   }
 
-  avg_speed = ms_to_kmt(collected_speed / (double) cars_int);
-  printf("AVERAGE SPEED: %.2lfkm/t\n", avg_speed);
+  avg_speed = ms_to_kmt(collected_speed / (double) vehicles);
+  printf("AVERAGE SPEED ON BRIDGE: %.2lfkm/t\n", avg_speed);
 }
 
+/**
+ * @brief  Converts x from m/s to Km/h
+ * @param  x:  the value to convers
+ * @retval returns a value in Km/h
+ */
 double ms_to_kmt(double x){
   return x * 3.6;
 }
 
-
+/**
+ * @brief  Converts x from Km/h to m/s
+ * @param  x:  the value to convers
+ * @retval returns a value in m/s
+ */
 double kmt_to_ms(double x){
   return x / 3.6;
 }
 
-
+/**
+ * @brief  Checks if the Vehicle in front is within the safe distance of the vehicle
+ * @param  car: The car to check
+ * @param  car_in_front: The vehicle infront of the car
+ * @retval 
+ */
 int check_if_safe_distance(Vehicle car, Vehicle car_in_front) {
     if (car_in_front.state == Mock) {
       return 1;
@@ -127,39 +108,16 @@ int check_if_safe_distance(Vehicle car, Vehicle car_in_front) {
     }
     return 0;
 }
-void print_vehicle(Vehicle car) {
-  if (car.state != Done) {
-    printf("Vehicle(%d:%s): Speed: %.3lf(%.1lf), position: %.2lf, secs_on_bridge: %d, speed_limit: %.1lf, acceleration: %.3lf, safe_distance: %.2lf, Lane: %d, State: %s, Time_waited: %d\n", car.ID, lane_to_string(car.type),car.speed, ms_to_kmt(car.speed), car.position, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.acceleration, car.safe_distance, car.lane, state_to_string(car.state), car.time_waited_for_green_light);
 
-  }
-    }
 
-void print_all_vechile(Vehicle car) {
-    printf("Vehicle(%5d:%s): Lane: %2d, secs_on_bridge: %3d, speed_limit: %4.1lf, avg_speed: %3.2lf, Time waited on green light: %3d\n", car.ID,lane_to_string(car.type), car.lane, car.secs_on_bridge, ms_to_kmt(car.speed_limit), car.avg_speed, car.time_waited_for_green_light);
-}
 
-void print_vehicles(Vehicle *cars, int cars_int) {
-    int lane = 0;
-    for (int i = 0; i < cars_int; i++) {
-      if (cars[i].lane > lane) {
-        printf("\n\n");
-        lane = cars[i].lane;
-      }
-        print_vehicle(cars[i]);
-    }
-}
 
-void print_all_vechiles(Vehicle *cars, int cars_int) {
-int lane = 0;
-    for (int i = 0; i < cars_int; i++) {
-      if (cars[i].lane > lane) {
-        printf("\n\n");
-        lane = cars[i].lane;
-      }
-        print_all_vechile(cars[i]);
-    }
-}
 
+/**
+ * @brief  Converts the type Light_color to string
+ * @param  color: The variable to convert
+ * @retval returns the Light_color in a string
+ */
 char* color_to_string(Light_color color) {
   switch (color)
   {
@@ -178,6 +136,11 @@ char* color_to_string(Light_color color) {
   }
 }
 
+/**
+ * @brief  Converts the type Lane_type to string
+ * @param  type: The variable to convert
+ * @retval returns the Lane_type in a string
+ */
 char* lane_to_string(Lane_type type) {
   switch (type)
   {
@@ -196,6 +159,11 @@ char* lane_to_string(Lane_type type) {
   }
 }
 
+/**
+ * @brief  Converts the type State to string
+ * @param  state: The variable to convert
+ * @retval returns the State in a string
+ */
 char* state_to_string(State state) {
   switch (state)
   {
@@ -220,46 +188,26 @@ char* state_to_string(State state) {
   }
 }
 
+
+/**
+ * @brief  Creates a road
+ * @param  speed_limit: The speed limit on the road
+ * @param  lane: What type of lane
+ * @param  len: The length of the road
+ * @retval Returns a new road
+ */
 Road create_road(double speed_limit, Lane_type lane, double len) {
     Road road = {kmt_to_ms(speed_limit), lane, len};
     return road;
 }
 
-Traffic_light create_light(Light_color color, double position, int timer_green, int timer_red) {
-    Traffic_light light = {color, position, 0, timer_green, timer_red};
-    return light;
-}
 
-Traffic_light count_timer(Traffic_light light) {
-  light.timer += 1;
-    if (light.color == green && light.timer == light.timer_green)
-    {
-      light.color = red;
-      light.timer = 0;
-    }
-    else if (light.color == red && light.timer == light.timer_red)
-    {
-      light.color = green;
-      light.timer = 0;
-    }
-  return light;
-}
-
-Traffic_light nearest_traffic_light(Vehicle car, Traffic_light lights[], int lights_int) {
-  int i;
-  Traffic_light nearest_light = {dummy, 99999, 0, 0, 0};
-  if (lights_int < 1) {
-    return nearest_light;
-  }
-  for (i = 0; i < lights_int; i++) { /* remember variable for number of lights */
-    if (lights[i].position > car.position && nearest_light.position > lights[i].position) {
-      nearest_light = lights[i];
-    }
-  }
-  return nearest_light;
-}
-
-
+/**
+ * @brief  Compares a to b
+ * @param  a: value 1 of array
+ * @param  b: value 2 of array
+ * @retval returns an int
+ */
 int cmpfunc (const void * a, const void * b) {
    Vehicle l = *(const Vehicle *)a;
    Vehicle r = *(const Vehicle *)b;
@@ -269,6 +217,15 @@ int cmpfunc (const void * a, const void * b) {
    return l.lane - r.lane;
 }
 
+/**
+ * @brief  Saves variables to a csv formatted file
+ * @param  *cars: The array of Vehicles
+ * @param  cars_int: The amount of vehicles in cars
+ * @param  secs: The time it took to run the simulation
+ * @param  duration: The target time of simulation
+ * @param  total: The total amount of Vehicles
+ * @retval None
+ */
 void save_to_file(Vehicle *cars, int cars_int, int secs, int duration, int total) {
   FILE * fp;
    int i;
@@ -281,6 +238,12 @@ void save_to_file(Vehicle *cars, int cars_int, int secs, int duration, int total
   fclose (fp);
 }
 
+/**
+ * @brief  Sorts the cars array by lane and prints it with more data
+ * @param  *cars: The array of Vehicles
+ * @param  cars_int: The amount Vehicles in cars
+ * @retval None
+ */
 void sort_lanes(Vehicle *cars, int cars_int){
   Vehicle *print_cars = malloc(sizeof(Vehicle) * cars_int);
   for (int i = 0; i < cars_int; i++){
@@ -291,6 +254,12 @@ void sort_lanes(Vehicle *cars, int cars_int){
   free(print_cars);
 }
 
+/**
+ * @brief  Sorts the cars array by lane and prints it with less data
+ * @param  *cars: The array of Vehicles
+ * @param  cars_int: The amount Vehicles in cars
+ * @retval None
+ */
 void sort_lanes_done(Vehicle *cars, int cars_int){
   Vehicle *print_cars = malloc(sizeof(Vehicle) * cars_int);
   for (int i = 0; i < cars_int; i++){
@@ -301,31 +270,12 @@ void sort_lanes_done(Vehicle *cars, int cars_int){
   free(print_cars);
 }
 
-
-
-
-
+/**
+ * @brief  Creates a random value between min and max
+ * @param  min: the min value
+ * @param  max: the max value
+ * @retval returns a random value
+ */
 double rand_uniform(double min, double max){
   return (max - min) * ( (double)rand() / (double)RAND_MAX ) + min;
-}
-
-void print_traffic_light(Traffic_light lights[], int a) {
-  for (int i = 0; i < a; i++) {
-    if (lights[i].position > 1) {
-      if (color_to_string(lights[i].color) == "Red") {
-      printf("Position: %.0lf Color: %s   Timer: %d/%d\n", lights[i].position, color_to_string(lights[i].color), lights[i].timer, lights[i].timer_red);
-      }
-      else {
-      printf("Position: %.0lf Color: %s Timer: %d/%d\n", lights[i].position, color_to_string(lights[i].color), lights[i].timer, lights[i].timer_green);
-      }
-    }
-    else {
-      if (color_to_string(lights[i].color) == "Red") {
-      printf("Position:   %.0lf Color: %s   Timer: %d/%d\n", lights[i].position, color_to_string(lights[i].color), lights[i].timer, lights[i].timer_red);
-      }
-      else {
-      printf("Position:   %.0lf Color: %s Timer: %d/%d\n", lights[i].position, color_to_string(lights[i].color), lights[i].timer, lights[i].timer_green);
-      }
-    }
-  }
 }
