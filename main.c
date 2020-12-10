@@ -5,14 +5,14 @@
 #include <windows.h>
 #include <math.h>
 
-#include "structs.h"
-#include "vehicles.h"
-#include "functions.h"
-#include "traffic_light.h"
+#include "headers\structs.h"
+#include "headers\vehicles.h"
+#include "headers\functions.h"
+#include "headers\traffic_light.h"
 
-#include "traffic_light.c"
-#include "vehicles.c"
-#include "functions.c"
+#include "source\traffic_light.c"
+#include "source\vehicles.c"
+#include "source\functions.c"
 
 
 int main(void) {

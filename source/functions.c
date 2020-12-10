@@ -1,6 +1,3 @@
-#include "functions.h"
-#include "structs.h"
-
 
 /**
  * @brief  Sets config values for the program

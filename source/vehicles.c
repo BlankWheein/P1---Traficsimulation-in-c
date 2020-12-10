@@ -1,5 +1,3 @@
-#include "vehicles.h"
-#include "structs.h"
 
 /**
  * @brief  Used to create a new array with n amount of Vehicles

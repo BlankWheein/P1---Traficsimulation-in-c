@@ -1,6 +1,3 @@
-#include "traffic_light.h"
-#include "structs.h"
-
 /**
  * @brief  Creates a traffic light struct
  * @param  color: The start color of the light
