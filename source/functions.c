@@ -12,19 +12,19 @@
 void prompt(double *thru_put, int *iter_speed, int *cars_sec, int *road_int, int *bus_lane_int, int *duration){
   do{
     system("cls");
-    printf("\nWhat throughput do you want per hour? ");
+    printf("\nHow many Vehicles per hour do you want to cross the bridge per hour? ");
     scanf(" %lf", thru_put);
   }while(*thru_put < 0);
 
   do{
     system("cls");
-    printf("\nWhat iteration speed do u want? (1: slow, 50: fast, 9999999: Really fast) ");
+    printf("\nHow many seconds in simulation time do you want between prints to console? (1: slow, 50: fast, 9999999: Really fast) ");
     scanf(" %d", iter_speed);
   }while(*iter_speed < 0);
 
   do{
     system("cls");
-    printf("\nWhat interval between spawning cars? ");
+    printf("\nWhat interval in seconds between spawning cars? ");
     scanf(" %d", cars_sec);
   }while(*cars_sec < 0);
 
