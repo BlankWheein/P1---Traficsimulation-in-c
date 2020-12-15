@@ -16,30 +16,42 @@
 
 
 int main(void) {
-printf("RUNNING SIMULATION\n");
-int roads_int = 4;
-Road roads[roads_int];
+   int road_int = 1;
+   Road roads[road_int];
+   for (int i = 0; i < road_int; i++){
+     roads[i] = create_road(50, Car, 670);
+   }
+   int cars_int = 1;
+   Vehicle *cars = Create_allocate_cars(cars_int, roads, road_int);
+   cars[0].speed_limit = 49;
+   cars[0].speed_limit_time = 60;
+   printf("testing set_car_acceleration \n");
+   printf(" %lf \n", cars[0].acceleration);
+   cars[0] = set_car_acceleration(cars[0]);
+   printf(" %lf \n", cars[0].acceleration);
+   printf(" %lf, %lf \n", cars[0].speed_limit_time, cars[0].speed_limit);
+ if (cars[0].acceleration == 5) {
+   /* code */
+ }
+   int lights_int = 2;
+   Traffic_light lights[] = {
+                             create_light(red, 1, 35, 30),
+                             create_light(red, 650, 25, 30)
+                           };
+   cars[0].state = Driving;
+   cars[0].position = 300;
+   cars[0] = state_driving(cars[0], cars, cars_int, roads, lights, lights_int, road_int);
 
- for (int i = 0; i < 2; i++)
-  {
-    roads[i] = create_road(50, PlusBus, 670);
+   printf("Starting at 300 after acceleration = %lf \n %s \n",cars[0].position, state_to_string(cars[0].state) );
+
+
+int min = 170, max = 250;
+int count = 0;
+for (int i = 0; i < 1000; i++) {
+  double x = rand_uniform(min, max);
+  if (x >= min && x <= max) {
+    count += 1;
   }
-  for (int j = 2; j < 4; j++)
-  {
-    roads[j] = create_road(50, Car, 670);
-  }
-
-  int cars_int = 1;
-  int lights_int = 3;
-  Traffic_light lights[] = {create_light(red, 1, 35, 30), create_light(red, 300, 5400, 300), create_light(red, 650, 25, 30)};
-
-  Vehicle *cars = Create_allocate_cars(cars_int, roads, 4);
-  cars[0].position = 100;
-  cars[0].speed = 0;
-  cars[0].acceleration = 2.00;
-  print_vehicle(cars[0]);
-  cars[0] = accelerate_car(cars[0], roads, roads_int);
-  print_vehicle(cars[0]);
-
-return 0;
+}
+printf("%d\n",count );
 }

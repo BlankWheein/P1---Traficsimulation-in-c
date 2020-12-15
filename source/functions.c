@@ -39,7 +39,7 @@ void prompt(double *thru_put, int *iter_speed, int *cars_sec, int *road_int, int
     printf("\nHow many lanes should be PlusBus lanes? (Rest will be Car lanes) ");
     scanf(" %d", bus_lane_int);
   }while(*bus_lane_int < 0);
-  
+
   do{
     system("cls");
     printf("\nHow many minutes do you want the simulation to run for? ");
@@ -62,7 +62,7 @@ void pnt_avg_speed_bridge(Vehicle *cars, int cars_int){
        collected_speed += cars[i].speed;
        vehicles += 1;
     }
-    
+
   }
 
   avg_speed = ms_to_kmt(collected_speed / (double) vehicles);
@@ -91,7 +91,7 @@ double kmt_to_ms(double x){
  * @brief  Checks if the Vehicle in front is within the safe distance of the vehicle
  * @param  car: The car to check
  * @param  car_in_front: The vehicle infront of the car
- * @retval 
+ * @retval
  */
 int check_if_safe_distance(Vehicle car, Vehicle car_in_front) {
     if (car_in_front.state == Mock) {
