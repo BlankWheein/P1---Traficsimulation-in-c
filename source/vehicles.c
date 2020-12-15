@@ -154,9 +154,9 @@ Vehicle set_safe_distance(Vehicle car) {
 Vehicle create_vehicle(int id, int dist, double speed_limit_, Road roads[], int road_int) {
     Lane_type type;
     double chance = rand_uniform(0, 100);
-    if (chance <= 92.98) {
+    if (chance <= 98.20) {
       type = Car;
-    } else if (chance > 92.98 && chance < 93.68) {
+    } else if (chance > 98.20 && chance < 99.69) {
       type = PlusBus;
     } else {
       type = Bus;
