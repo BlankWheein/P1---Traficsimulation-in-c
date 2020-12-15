@@ -223,11 +223,12 @@ int cmpfunc (const void * a, const void * b) {
  * @param  total: The total amount of Vehicles
  * @retval None
  */
-void save_to_file(Vehicle *cars, int cars_int, int secs, int duration, int total) {
+void save_to_file(Vehicle *cars, int cars_int, int secs, int duration, double throughput, int speed, int cars_sec, int lanes, int plusbuslanes) {
   FILE * fp;
    int i;
    fp = fopen ("data.csv","w+");
-   fprintf(fp,"Duration of simulation, %d,Time stopped spawning cars, %d, Total number of cars:,%d\n", secs, duration, total);
+   fprintf(fp, "Throughput:,%lf\nIteration speed:,%d\nInterval between vehicle spawns:,%d\nLanes in total:,%d\nPlsubus lanes:,%d\n", throughput, speed, cars_sec, lanes, plusbuslanes);
+   fprintf(fp,"Time stopped spawning cars, %d\nDuration of simulation, %d\nTotal number of cars:,%d\n", duration, secs, cars_int);
    fprintf(fp, "ID, TYPE, LANE, SECS ON BRIDGE, AVG SPEED, TIME WAITED FOR GREEN\n");
    for(i = 0; i < cars_int; i++){
        fprintf(fp, "%d,%s,%d,%d,%.3lf,%d\n", cars[i].ID,lane_to_string(cars[i].type), cars[i].lane +1, cars[i].secs_on_bridge, cars[i].avg_speed, cars[i].time_waited_for_green_light);

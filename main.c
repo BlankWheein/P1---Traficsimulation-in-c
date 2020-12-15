@@ -127,18 +127,17 @@ int main(void)
     vehicles_per_lane[cars[i].lane] += 1;
     secs_on_bridge[cars[i].lane] += cars[i].secs_on_bridge;
   }
+  save_to_file(cars, cars_int, secs, duration, thru_put, iter_speed, cars_sec, road_int, bus_lane_int);
   sort_lanes_done(cars, cars_int);
-  int total = 0;
   printf("\n");
   printf("Duration of simulation %d,Time stopped spawning cars %d\n", secs, duration);
   printf("Avarage secs on bridge per lane\n");
   for (int i = 0; i < road_int; i++)
   {
     printf("%lf: %d\n", secs_on_bridge[i] / vehicles_per_lane[i] + 1, vehicles_per_lane[i]);
-    total += vehicles_per_lane[i];
   }
-  printf("Total Vehicles: %d", total);
-  save_to_file(cars, cars_int, secs, duration, total);
+  printf("Total Vehicles: %d", cars_int);
+  
 
   return 0;
 }
