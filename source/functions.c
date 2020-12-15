@@ -12,7 +12,7 @@
 void prompt(double *thru_put, int *iter_speed, int *cars_sec, int *road_int, int *bus_lane_int, int *duration){
   do{
     system("cls");
-    printf("\nHow many Vehicles per hour do you want to cross the bridge per hour? ");
+    printf("\nHow many Vehicles per hour do you want to across the bridge (Avarage is around 1800-2100)");
     scanf(" %lf", thru_put);
   }while(*thru_put < 0);
 

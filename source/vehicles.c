@@ -106,22 +106,29 @@ Vehicle accelerate_car(Vehicle car, Road roads[], int road_int){
  * @param  road_int: The amount of roads in the roads array
  * @retval Returns the updated Vehicle
  */
-Vehicle drive(Vehicle car, Vehicle *cars, int cars_int, Road roads[], Traffic_light lights[], int lights_int, int road_int) {
+Vehicle drive(Vehicle car,
+              Vehicle *cars,
+              int cars_int,
+              Road roads[],
+              Traffic_light lights[],
+              int lights_int,
+              int road_int) {
+
   if (car.state == Done) {
     return car;
   }
-   if (car.state == Waiting) {
-car = state_waiting(car, cars, cars_int, roads, lights, lights_int, road_int);
-   } else if(car.state == Driving) {
+
+  if (car.state == Waiting) {
+     car = state_waiting(car, cars, cars_int, roads, lights, lights_int, road_int);
+  } else if(car.state == Driving) {
      car = state_driving(car, cars, cars_int, roads, lights, lights_int, road_int);
-   } else if(car.state == HoldingForRed) {
+  } else if(car.state == HoldingForRed) {
      car = state_driving(car, cars, cars_int, roads, lights, lights_int, road_int);
-   }
+  }
 
 if (car.position > 0 && car.position < roads[0].length) {
-  car.avg_speed_total += car.speed;
+ car.avg_speed_total += car.speed;
 }
-
 return car;
 }
 
@@ -160,7 +167,6 @@ Vehicle create_vehicle(int id, int dist, double speed_limit_, Road roads[], int 
         canbeplusbus = 1;
       }
     }
-
     if (canbeplusbus == 0 && type == PlusBus) {
       type = Bus;
     }
@@ -194,7 +200,12 @@ Vehicle create_vehicle(int id, int dist, double speed_limit_, Road roads[], int 
     State state = Waiting;
     int time_waited_for_green_light = 0;
 
-    Vehicle car = {speed, position, speed_limit, speed_limit_time, time_driving, acceleration, safe_distance, ID, lane, secs_on_bridge, state, type, time_waited_for_green_light};
+    Vehicle car = {speed, position, speed_limit,
+                   speed_limit_time, time_driving,
+                   acceleration, safe_distance,
+                   ID, lane,
+                   secs_on_bridge, state,
+                   type, time_waited_for_green_light};
     return car;
 }
 
@@ -213,7 +224,8 @@ Vehicle get_nearest_car(Vehicle car, Vehicle *cars, int cars_int, Road roads[], 
         return closest;
     }
     for (int i = 0; i < cars_int; i++) {
-        if (car.position < cars[i].position && cars[i].position < closest.position && car.lane == cars[i].lane) {
+        if (car.position < cars[i].position &&
+            cars[i].position < closest.position && car.lane == cars[i].lane) {
             closest = cars[i];
         }
     }
@@ -227,6 +239,7 @@ Vehicle get_nearest_car(Vehicle car, Vehicle *cars, int cars_int, Road roads[], 
  * @param  closest: The closest Vehicle
  * @retval returns the updated Vehicle
  */
+
 Vehicle check_light(Traffic_light light, Vehicle car, Vehicle closest) {
   if (light.color == red) {
     if (light.position - car.position < 30) {
@@ -235,9 +248,7 @@ Vehicle check_light(Traffic_light light, Vehicle car, Vehicle closest) {
         car.speed = closest.position - car.position - 1;
         if (car.speed < 0) {
           car.speed = 0;
-        }
-      }
-    }
+    }}}
     if (light.position - car.position < 10) {
       car.speed = 0;
     }
@@ -260,12 +271,13 @@ Vehicle check_light(Traffic_light light, Vehicle car, Vehicle closest) {
  * @param  road_int: Amount of Roads in the Road array
  * @retval Returns the updated car
  */
-Vehicle state_driving(Vehicle car, Vehicle *cars, int cars_int, Road roads[], Traffic_light lights[], int lights_int, int road_int) {
+
+Vehicle state_driving(Vehicle car, Vehicle *cars, int cars_int, Road roads[],
+                      Traffic_light lights[], int lights_int, int road_int) {
   car = set_car_acceleration(car);
   Vehicle closest = get_nearest_car(car, cars, cars_int, roads, road_int);
   car = set_safe_distance(car);
   Traffic_light light = nearest_traffic_light(car, lights, lights_int);
-
   int is_safe = check_if_safe_distance(car, closest);
 
   if (is_safe == 1) {
@@ -273,21 +285,14 @@ Vehicle state_driving(Vehicle car, Vehicle *cars, int cars_int, Road roads[], Tr
       if (car.state == HoldingForRed) {
         car.state = Driving;
       }
-  }
-
-  if (is_safe == 0) {
-
+  } else if (is_safe == 0) {
     if (closest.state == Mock) {
       return car;
     }
-      if (car.speed > closest.position - car.position) {
-        car.speed = closest.speed;
-      }
-
-       // Needs a check if car will end up in other car, if so deaccelerate
+    if (car.speed > closest.position - car.position) {
+      car.speed = closest.speed;
+    }
   }
-
-  
 
   car = check_light(light, car, closest);
   car.position += car.speed;
@@ -311,15 +316,19 @@ Vehicle state_driving(Vehicle car, Vehicle *cars, int cars_int, Road roads[], Tr
  * @param  road_int: Amount of Roads in the Road array
  * @retval Returns the updated car
  */
-Vehicle state_waiting(Vehicle car, Vehicle *cars, int cars_int, Road roads[], Traffic_light lights[], int lights_int, int road_int) {
+Vehicle state_waiting(Vehicle car,
+                      Vehicle *cars,
+                      int cars_int,
+                      Road roads[],
+                      Traffic_light lights[],
+                      int lights_int,
+                      int road_int) {
   Vehicle closest = get_nearest_car(car, cars, cars_int, roads, road_int);
-  
   int is_safe = check_if_safe_distance(car, closest);
   if (is_safe == 1) {
    car.state = Driving;
    car = state_driving(car, cars, cars_int, roads, lights, lights_int, road_int);
  }
-
 return car;
 }
 

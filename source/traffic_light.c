@@ -6,7 +6,11 @@
  * @param  timer_red: The duration of the red light in seconds 
  * @retval returns a new traffic light
  */
-Traffic_light create_light(Light_color color, double position, int timer_green, int timer_red) {
+Traffic_light create_light(Light_color color,
+                           double position,
+                           int timer_green,
+                           int timer_red)
+  {
     Traffic_light light = {color, position, 0, timer_green, timer_red};
     return light;
 }
@@ -45,7 +49,7 @@ Traffic_light nearest_traffic_light(Vehicle car, Traffic_light lights[], int lig
   if (lights_int < 1) {
     return nearest_light;
   }
-  for (i = 0; i < lights_int; i++) { /* remember variable for number of lights */
+  for (i = 0; i < lights_int; i++) {
     if (lights[i].position > car.position && nearest_light.position > lights[i].position) {
       nearest_light = lights[i];
     }
