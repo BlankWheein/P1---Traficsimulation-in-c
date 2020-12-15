@@ -23,15 +23,12 @@ int main(void) {
    }
    int cars_int = 1;
    Vehicle *cars = Create_allocate_cars(cars_int, roads, road_int);
-   cars[0].speed_limit = 49;
+   cars[0].speed_limit = 150;
    cars[0].speed_limit_time = 60;
    printf("testing set_car_acceleration \n");
-   printf(" %lf \n", cars[0].acceleration);
    cars[0] = set_car_acceleration(cars[0]);
-   printf(" %lf \n", cars[0].acceleration);
-   printf(" %lf, %lf \n", cars[0].speed_limit_time, cars[0].speed_limit);
  if (cars[0].acceleration == 5) {
-   /* code */
+   printf("set_car_acceleration no errors \n\n");
  }
    int lights_int = 2;
    Traffic_light lights[] = {
