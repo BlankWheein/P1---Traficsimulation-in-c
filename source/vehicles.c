@@ -19,7 +19,7 @@ Vehicle * Create_allocate_cars(int n, Road roads[], int road_int) {
  * @param  new: The amount of cars to add to the *ptr array
  * @param  roads[]: The Road array (Used to create the cars)
  * @param  road_int: The amount of roads in the roads array
- * @retval Returns an updated array of Vehicles 
+ * @retval Returns an updated array of Vehicles
  */
 Vehicle * Realloc_cars(Vehicle *ptr, int *cars_int, int new, Road roads[], int road_int) {
   Vehicle *cars = malloc(sizeof(Vehicle) * (*cars_int + new));
@@ -43,7 +43,7 @@ Vehicle * Realloc_cars(Vehicle *ptr, int *cars_int, int new, Road roads[], int r
  * @param  n: The end index value
  * @param  roads[]: The Road array (Used to create the cars)
  * @param  road_int: The amount of roads in the roads array
- * @retval Returns an updated array of Vehicles 
+ * @retval Returns an updated array of Vehicles
  */
 Vehicle * randomize_cars(Vehicle *cars,int m, int n, Road roads[], int road_int) {
   int id = m;
@@ -79,7 +79,7 @@ Vehicle set_car_acceleration(Vehicle car){
 
 /**
  * @brief  Updates a Vehicles speed
- * @param  car: the Vehicle to accelerate 
+ * @param  car: the Vehicle to accelerate
  * @param  roads[]: The Road array (Used to create the cars)
  * @param  road_int: The amount of roads in the roads array
  * @retval Returns an updated Vehicle
@@ -97,8 +97,8 @@ Vehicle accelerate_car(Vehicle car, Road roads[], int road_int){
 
 /**
  * @brief  This functions checks if the Vehicle can drive, if so then drive
- * @param  car: The Vehicle to move forward 
- * @param  *cars: The array of Vehicles 
+ * @param  car: The Vehicle to move forward
+ * @param  *cars: The array of Vehicles
  * @param  cars_int: The amount of Vehicles in *cars
  * @param  roads[]: The Road array (Used to create the cars)
  * @param  lights[]: The array of Traffic of lights on the road
@@ -134,7 +134,7 @@ return car;
 
 /**
  * @brief  Updates a Vehicles Safe distance
- * @param  car: The Vehicle to update safe distance 
+ * @param  car: The Vehicle to update safe distance
  * @retval Returns an update Vehicle
  */
 Vehicle set_safe_distance(Vehicle car) {
@@ -170,7 +170,7 @@ Vehicle create_vehicle(int id, int dist, double speed_limit_, Road roads[], int 
     if (canbeplusbus == 0 && type == PlusBus) {
       type = Bus;
     }
-    
+
     int lane;
     int waiting = 0;
     do {
@@ -190,7 +190,7 @@ Vehicle create_vehicle(int id, int dist, double speed_limit_, Road roads[], int 
     } else {
       speed_limit = kmt_to_ms(speed_limit_ / 2);
     }
-    
+
     double speed_limit_time = 65.5;
     double time_driving = 0;
     double acceleration = 0;
@@ -234,7 +234,7 @@ Vehicle get_nearest_car(Vehicle car, Vehicle *cars, int cars_int, Road roads[], 
 
 /**
  * @brief  Checks if a Vehicle is too close to a red light
- * @param  light: The Traffic light you want to check 
+ * @param  light: The Traffic light you want to check
  * @param  car: The Vehicle you want to check
  * @param  closest: The closest Vehicle
  * @retval returns the updated Vehicle
@@ -253,7 +253,7 @@ Vehicle check_light(Traffic_light light, Vehicle car, Vehicle closest) {
       car.speed = 0;
     }
     if (car.speed == 0 && car.position > 1) {
-      car.time_waited_for_green_light += 1; 
+      car.time_waited_for_green_light += 1;
       car.state = HoldingForRed;
     }
 }

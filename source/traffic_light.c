@@ -3,7 +3,7 @@
  * @param  color: The start color of the light
  * @param  position: The position of the light in meters
  * @param  timer_green: The duration of the green light in seconds
- * @param  timer_red: The duration of the red light in seconds 
+ * @param  timer_red: The duration of the red light in seconds
  * @retval returns a new traffic light
  */
 Traffic_light create_light(Light_color color,
@@ -41,7 +41,7 @@ Traffic_light count_timer(Traffic_light light) {
  * @param  car: The car to check
  * @param  lights[]: The Array of traffic lights
  * @param  lights_int: The amount of traffic lights in lights[]
- * @retval 
+ * @retval
  */
 Traffic_light nearest_traffic_light(Vehicle car, Traffic_light lights[], int lights_int) {
   int i;
