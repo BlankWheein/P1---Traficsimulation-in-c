@@ -57,6 +57,7 @@ void testVecDriving(void)
 {
   /* Test 2: Testing vehicle driving with multiple vehicles*/
   printf("testing vehicle driving with multiple vehicles... ");
+  int error = 0;
   int road_int = 1;
   Road roads[road_int];
   for (int i = 0; i < road_int; i++)
@@ -65,10 +66,10 @@ void testVecDriving(void)
   }
   int cars_int = 3;
   Vehicle *cars = Create_allocate_cars(cars_int, roads, road_int);
-
+  cars[0].speed_limit = 0;
   int lights_int = 2;
   double pos = 300;
-  int error = 0;
+
   Traffic_light lights[] = {
       create_light(red, 1, 35, 30),
       create_light(red, 650, 25, 30)};
@@ -78,13 +79,13 @@ void testVecDriving(void)
     cars[i].state = Driving;
 
     if (i == 0)
-      pos += 17;
+      pos;
     else if (i == 1)
-      pos += 7;
+      pos -= 5;
     else if (i == 2)
-      pos = pos;
-
+      pos -= 12;
     cars[i].position = pos;
+
     cars[i] = state_driving(cars[i], cars, cars_int, roads, lights, lights_int, road_int);
 
     if (i == 1)
@@ -95,9 +96,21 @@ void testVecDriving(void)
         break;
       }
     }
+    if (i == 2){
+      if (cars[2].position - cars[1].position < 5){
+        error = 1;
+        break;
+      }
+    }
   }
+<<<<<<< Updated upstream
   if (error == 1)
   {
+=======
+  printf("%lf, %lf\n", cars[1].position, cars[0].position);
+  printf("%lf, %lf\n", cars[2].position, cars[1].position);
+  if (error == 1){
+>>>>>>> Stashed changes
     printf("Error!\n  A vehicle's position got too close to the vehicle in front\n");
   }
   else
@@ -138,9 +151,14 @@ void testVecRedLight(void)
     printf("Done!\n  state_driving as %s has no errors\n", state_to_string(cars[0].state), pos, cars[0].position);
 }
 
+<<<<<<< Updated upstream
 void testScenario1(void)
 {
   /* Test 4: One vehicle holding for red and another driving and holding behind vehicle*/
+=======
+void testScenario1(void){
+  /* Test 4: Vehicle holding for red and another vehicle driving and holding behind vehicle 1*/
+>>>>>>> Stashed changes
   printf("testing vehicle driving scenario 1: vehicle 1 holding for red and vehicle 2 driving to vehicle 1");
   int road_int = 1;
   Road roads[road_int];
@@ -148,26 +166,29 @@ void testScenario1(void)
   {
     roads[i] = create_road(50, Car, 670);
   }
-  int cars_int = 3;
+  int cars_int = 2;
   Vehicle *cars = Create_allocate_cars(cars_int, roads, road_int);
 
   int lights_int = 2;
-  double pos = 300;
+  double pos = 649;
   int error = 0;
   Traffic_light lights[] = {
       create_light(red, 1, 35, 30),
       create_light(red, 650, 25, 30)};
 
+<<<<<<< Updated upstream
   for (int i = 0; i < 3; i++)
   {
+=======
+  for (int i = 0; i < 2; i++){
+>>>>>>> Stashed changes
     cars[i].state = Driving;
 
     if (i == 0)
-      pos += 17;
+      pos -= 3;
     else if (i == 1)
-      pos += 7;
-    else if (i == 2)
-      pos = pos;
+      pos;
+
 
     cars[i].position = pos;
     cars[i] = state_driving(cars[i], cars, cars_int, roads, lights, lights_int, road_int);
