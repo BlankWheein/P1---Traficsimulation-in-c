@@ -12,25 +12,25 @@
 void prompt(double *thru_put, int *iter_speed, int *cars_sec, int *road_int, int *bus_lane_int, int *duration){
   do{
     system("cls");
-    printf("\nHow many Vehicles per hour do you want to across the bridge\nAverage in rush hour is around 2600\nAverage when not in rush hour around 1800-1900 ");
+    printf("\nHow many Vehicles per hour do you want to cross the bridge\nAverage in rush hour is around 2600\nAverage when not in rush hour around 1800-1900 ");
     scanf(" %lf", thru_put);
   }while(*thru_put < 0);
 
   do{
     system("cls");
-    printf("\nHow many seconds in simulation time do you want between prints to console? (1: slow, 50: fast, 9999999: Really fast) ");
+    printf("\nHow many seconds in simulation time do you want between prints in the console? (1: slow, 50: fast, 9999999: Really fast) ");
     scanf(" %d", iter_speed);
   }while(*iter_speed < 0);
 
   do{
     system("cls");
-    printf("\nWhat interval in seconds between spawning cars?\nAverage time is around 30 seconds ");
+    printf("\nHow often do you the cars to spawn (in seconds)\nAverage time is around 30 seconds ");
     scanf(" %d", cars_sec);
   }while(*cars_sec < 0);
 
   do{
     system("cls");
-    printf("\nHow many lanes in total? ");
+    printf("\nHow many lanes in do you want in total? ");
     scanf(" %d", road_int);
   }while(*road_int < 1);
 
