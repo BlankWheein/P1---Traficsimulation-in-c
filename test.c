@@ -56,7 +56,7 @@ void testVecAccel(void)
 void testVecDriving(void)
 {
   /* Test 2: Testing vehicle driving with multiple vehicles*/
-  printf("testing vehicle driving with multiple vehicles... ");
+  printf("testing vehicle driving... ");
   int error = 0;
   int road_int = 1;
   Road roads[road_int];
@@ -71,40 +71,23 @@ void testVecDriving(void)
   double pos = 300;
 
   Traffic_light lights[] = {
-      create_light(red, 1, 35, 30),
-      create_light(red, 650, 25, 30)};
+    create_light(red, 1, 35, 30),
+    create_light(red, 650, 25, 30)};
 
-  for (int i = 0; i < 3; i++)
-  {
+  for (int i = 0; i < 3; i++){
     cars[i].state = Driving;
-
-    if (i == 0)
-      pos;
-    else if (i == 1)
-      pos -= 5;
-    else if (i == 2)
-      pos -= 12;
+    if (i == 1)
+      pos -= 3;
+    if (i == 2)
+      pos -= 8;
     cars[i].position = pos;
 
     cars[i] = state_driving(cars[i], cars, cars_int, roads, lights, lights_int, road_int);
-
-    if (i == 1)
-    {
-      if (cars[1].position - cars[0].position < 5)
-      {
+    if (i < 0){
+      if (cars[i].position - cars[i-1].position < cars[i].safe_distance)
         error = 1;
-        break;
-      }
     }
-    if (i == 2){
-      if (cars[2].position - cars[1].position < 5){
-        error = 1;
-        break;
-      }
-    }
-  }
-  printf("%lf, %lf\n", cars[1].position, cars[0].position);
-  printf("%lf, %lf\n", cars[2].position, cars[1].position);
+  } 
   if (error == 1){
     printf("Error!\n  A vehicle's position got too close to the vehicle in front\n");
   }
@@ -128,14 +111,13 @@ void testVecRedLight(void)
   Vehicle *cars = Create_allocate_cars(cars_int, roads, road_int);
 
   int lights_int = 2;
-  double pos = 300;
+  double pos = 649;
   Traffic_light lights[] = {
       create_light(red, 1, 35, 30),
       create_light(red, 650, 25, 30)};
 
   cars[0].state = Driving;
-  cars[0].position = 649;
-  pos = 649;
+  cars[0].position = pos;
   lights[1].color = red;
 
   cars[0] = state_driving(cars[0], cars, cars_int, roads, lights, lights_int, road_int);
@@ -204,15 +186,15 @@ void testDoubleRng(void)
     }
   }
   if (count < 1000)
-    printf("Error!\n  a random double number went outside the range");
+    printf("Error!\n  a random double number went outside the range\n");
   else
-    printf("Done!\n  ");
+    printf("Done!\n  rand_uniform has no errors\n");
 }
 
 int testState_waiting_withlight(void)
 {
   /* Test 69: Testing vehicles entering the bridge */
-  printf("testing vehicle entering bridge with multiple vehicles and 1 light... \n");
+  printf("testing vehicle entering bridge with multiple vehicles and 1 light... ");
   int error = 0;
   int road_int = 1;
   Road roads[road_int];
@@ -251,11 +233,11 @@ int testState_waiting_withlight(void)
 
   if (error > 0)
   {
-    printf("There was an error, rip\n");
+    printf("Error!\n  There was an error, rip\n");
   }
   else if (error == 0)
   {
-    printf("testState_waiting_withlight has no errors\n");
+    printf("Done!\n  state_driving has no errors\n");
   }
 
   return error;
@@ -265,7 +247,7 @@ int testState_waiting_withlight(void)
 int testState_waiting_withoutlight(void)
 {
   /* Test 69: Testing vehicles entering the bridge */
-  printf("testing vehicle entering bridge with multiple vehicles and no lights... \n");
+  printf("testing vehicle entering bridge with multiple vehicles and no lights... ");
   int error = 0;
   int road_int = 1;
   Road roads[road_int];
@@ -299,11 +281,11 @@ int testState_waiting_withoutlight(void)
 
   if (error > 0)
   {
-    printf("There was an error, rip\n");
+    printf("Error!\n  There was an error, rip\n");
   }
   else if (error == 0)
   {
-    printf("testState_waiting_withoutlight has no errors\n");
+    printf("Done!\n  testState_waiting_withoutlight has no errors\n");
   }
 
   return error;
