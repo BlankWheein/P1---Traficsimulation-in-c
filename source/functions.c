@@ -18,7 +18,7 @@ void prompt(double *thru_put, int *iter_speed, int *cars_sec, int *road_int, int
 
   do{
     system("cls");
-    printf("\nHow many seconds in simulation time do you want between prints in the console? (1: slow, 50: fast, 9999999: Really fast) ");
+    printf("\nHow many seconds in simulation time do you want between prints in the console? (1: normal, 50: fast, 9999999: Really fast) ");
     scanf(" %d", iter_speed);
   }while(*iter_speed < 0);
 
@@ -36,7 +36,7 @@ void prompt(double *thru_put, int *iter_speed, int *cars_sec, int *road_int, int
 
   do{
     system("cls");
-    printf("\nHow many lanes should be PlusBus lanes? (Rest will be Car lanes) ");
+    printf("\nHow many lanes should be Plusbus lanes? (Rest will be Car lanes) ");
     scanf(" %d", bus_lane_int);
   }while(*bus_lane_int < 0);
 
