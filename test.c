@@ -205,11 +205,10 @@ int testState_waiting_withlight(void)
   int cars_int = 3;
   Vehicle *cars = Create_allocate_cars(cars_int, roads, road_int);
 
-  int lights_int = 2;
+  int lights_int = 1;
   double pos = 300;
   Traffic_light lights[] = {
-      create_light(red, 1, 35, 30),
-      create_light(red, 650, 25, 30)};
+      create_light(red, 1, 35, 30)};
 
   for (int j = 0; j < 40; j++)
   {
@@ -217,10 +216,7 @@ int testState_waiting_withlight(void)
     {
       cars[i] = drive(cars[i], cars, cars_int, roads, lights, lights_int, road_int);
       }
-    for (int j = 0; j < lights_int; j++)
-    {
-      lights[j] = count_timer(lights[j]);
-    }
+      lights[0] = count_timer(lights[0]);
   }
 
   for (int i = 0; i < cars_int; i++)
