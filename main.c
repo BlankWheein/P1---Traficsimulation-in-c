@@ -44,7 +44,7 @@ int main(void)
   int lights_int = 3;
   Traffic_light lights[] = {
                             create_light(red, 1, 35, 30),
-                            create_light(red, 300, 5400, 300),
+                            create_light(green, 300, 2000, 300),
                             create_light(red, 650, 25, 30)
                           };
   Vehicle *cars = Create_allocate_cars(cars_int, roads, road_int);
