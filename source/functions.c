@@ -24,7 +24,7 @@ void prompt(double *thru_put, int *iter_speed, int *cars_sec, int *road_int, int
 
   do{
     system("cls");
-    printf("\nHow often do you the cars to spawn (in seconds)\nAverage time is around 30 seconds ");
+    printf("\nHow often do you want the cars to spawn (in seconds)\nAverage time is around 30 seconds ");
     scanf(" %d", cars_sec);
   }while(*cars_sec < 0);
 
