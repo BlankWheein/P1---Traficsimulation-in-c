@@ -103,14 +103,9 @@ void testVecDriving(void)
       }
     }
   }
-<<<<<<< Updated upstream
-  if (error == 1)
-  {
-=======
   printf("%lf, %lf\n", cars[1].position, cars[0].position);
   printf("%lf, %lf\n", cars[2].position, cars[1].position);
   if (error == 1){
->>>>>>> Stashed changes
     printf("Error!\n  A vehicle's position got too close to the vehicle in front\n");
   }
   else
@@ -151,14 +146,9 @@ void testVecRedLight(void)
     printf("Done!\n  state_driving as %s has no errors\n", state_to_string(cars[0].state), pos, cars[0].position);
 }
 
-<<<<<<< Updated upstream
 void testScenario1(void)
 {
   /* Test 4: One vehicle holding for red and another driving and holding behind vehicle*/
-=======
-void testScenario1(void){
-  /* Test 4: Vehicle holding for red and another vehicle driving and holding behind vehicle 1*/
->>>>>>> Stashed changes
   printf("testing vehicle driving scenario 1: vehicle 1 holding for red and vehicle 2 driving to vehicle 1");
   int road_int = 1;
   Road roads[road_int];
@@ -176,12 +166,7 @@ void testScenario1(void){
       create_light(red, 1, 35, 30),
       create_light(red, 650, 25, 30)};
 
-<<<<<<< Updated upstream
-  for (int i = 0; i < 3; i++)
-  {
-=======
   for (int i = 0; i < 2; i++){
->>>>>>> Stashed changes
     cars[i].state = Driving;
 
     if (i == 0)
