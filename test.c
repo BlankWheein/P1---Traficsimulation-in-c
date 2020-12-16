@@ -173,7 +173,7 @@ void testScenario1(void)
 
 void testDoubleRng(void)
 {
-  /* Test X: Random double in range */
+  /* Test 5: Random double in range */
   printf("testing double in range...");
   int min = 170, max = 250;
   int count = 0;
@@ -193,7 +193,7 @@ void testDoubleRng(void)
 
 int testState_waiting_withlight(void)
 {
-  /* Test 69: Testing vehicles entering the bridge */
+  /* Test 6: Testing vehicles entering the bridge */
   printf("testing vehicle entering bridge with multiple vehicles and 1 light... ");
   int error = 0;
   int road_int = 1;
@@ -242,7 +242,7 @@ int testState_waiting_withlight(void)
 
 int testState_waiting_withoutlight(void)
 {
-  /* Test 69: Testing vehicles entering the bridge */
+  /* Test 7: Testing vehicles entering the bridge */
   printf("testing vehicle entering bridge with multiple vehicles and no lights... ");
   int error = 0;
   int road_int = 1;
