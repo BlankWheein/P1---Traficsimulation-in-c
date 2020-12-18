@@ -67,7 +67,7 @@ typedef struct {
   A structure to represent Roads 
 */
 typedef struct {
-  double speed_limit;  /**< The speed limit on the road (In Km/h)*/
+  double speed_limit;  /**< The speed limit on the road (In m/s)*/
   Lane_type lane_type; /**< The type of lane the road is (This is of Type Lane_type) */
   double length;       /**< The length of the road (In Meters) */
 } Road;
