@@ -55,3 +55,12 @@ From the data of the csv file the following data can be extracted
 
 This data clearly shows that in this case they should not choose to implement more than 1 Buslane since that would destroy the flow of traffic.
 More graphs can be made from the data using the csv file, this is just a few of the relevant ones in our case
+
+# Accuracy of data
+
+While this is a very simple simulation it can give powerful results. We have a bunch of unit tests that makes sure both the physics of the acceleration is correct, and to make sure that the cars behaves as they should in all scenarios. We did make some assumptions in this simulation based on observations from our data.
+
+ * Out of all the cars that drove on the bridge only 3 cars switched lane while on the bridge which made us limit the cars in our simulation to not being able to switch lane
+ * We also limited traffic lights to not have a yellow light, which should not affect the overall results
+ * cars have a fixed acceleration, this is something that would be easy to change but unsure if it would break anything so we had a static accelerationn
+
